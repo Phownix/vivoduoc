@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View,Image, TouchableOpacity, TextInput, Text, ScrollView , StyleSheet} from 'react-native';
+import { View,Image,TouchableOpacity, TextInput, Text, ScrollView , StyleSheet} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import ProfileIco from '../icons/profile';
 import PasswordIco from '../icons/password'
+import Test from '../icons/test'
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -115,14 +116,14 @@ const Login = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="light"/>
+      <StatusBar style="light" backgroundColor='#184f8a'/>
+      <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 50 }}>
       <View style={styles.logoVivoDuoc}>
         <Image 
           source={require('../../assets/logo_vivoduoc.png')}
-          style={{ width: 180, height: 43 }}
+          style={{ width: 185, height: 43 }}
         />
       </View>
-      <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <View>
           <Text style={styles.inputText}>
               Correo
@@ -134,7 +135,7 @@ const Login = () => {
               value={username}
             />
             <View style={styles.Icon}>
-              <ProfileIco iconColor="white"/>
+              <ProfileIco widthIcon={22} heightIcon={22} iconColor="white"/>
             </View>
           </View>
           <Text style={styles.inputText}>
@@ -156,17 +157,8 @@ const Login = () => {
           <Text style={styles.loginText}>Iniciar Sesión</Text>
         </TouchableOpacity>
       </ScrollView>
-      <View style={styles.logoDuoc}>
-        <Image 
-          source={require('../../assets/logo_duoc_uc.png')}
-          style={{ width: 180, height: 43 }}
-        />
-      </View>
-      <View style={styles.background}>
-        <Image
-          source={require('../../assets/background.png')}
-          style={{ width: '100%', height: '100%' }}
-        />
+      <View style={styles.bg}>
+        <Test/>
       </View>
     </View>
   );
@@ -185,12 +177,13 @@ const styles = StyleSheet.create({
   },
   input: {
     width: 300,
-    height: 45,
-    backgroundColor: '#012b56a2',
+    height: 40,
+    backgroundColor: '#ffffff24',
     paddingLeft: 40,
-    borderRadius: 10,
-    borderColor: '#012C56',
-    borderWidth: 2,
+    borderRadius: 6,
+    borderColor: '#adadada2',
+    borderLeftWidth: 3,
+    borderRightWidth: 3,
     fontSize: 16,
     fontWeight: 'bold',
     color: 'white',
@@ -217,24 +210,23 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: 300,
     height: 40,
-    backgroundColor: 'rgb(252, 189, 27)',
-    borderRadius: 10,
-    marginTop: 10
+    backgroundColor: 'rgba(252, 188, 27, 0.825)',
+    borderColor: 'rgb(252, 189, 27)',
+    borderWidth: 2,
+    borderRadius: 7,
+    marginTop: 15
   },
   loginText: {
     color: 'white',
     fontSize: 19,
     fontWeight: 'bold',
-    textShadowColor: 'rgba(0, 0, 0, 0.75)',
-    textShadowOffset: {width: -1, height: 1},
-    textShadowRadius: 5
   },
   logoVivoDuoc: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 45
+    marginBottom: 45
   },
   logoDuoc: {
     display: 'flex',
@@ -243,13 +235,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 20,
   },
-  background: {
+  bg: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
     zIndex: -1,
-    opacity: 0.7
   }
 });

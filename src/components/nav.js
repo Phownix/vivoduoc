@@ -29,7 +29,7 @@ export default function Nav() {
         },
         { 
             name: 'Profile', 
-            button: <TouchableOpacity onPress={() => navigation.navigate('Profile')} style={route.name === 'Profile' ? styles.btnActive :styles.btn}><ProfileIcon iconColor={route.name === 'Profile' ? "rgb(252, 189, 27)" : "#ffff"}/></TouchableOpacity>
+            button: <TouchableOpacity onPress={() => navigation.navigate('Profile')} style={route.name === 'Profile' ? styles.btnActive :styles.btn}><ProfileIcon widthIcon={26} heightIcon={26} iconColor={route.name === 'Profile' ? "rgb(252, 189, 27)" : "#ffff"}/></TouchableOpacity>
         },
     ]
 

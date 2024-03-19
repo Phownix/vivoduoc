@@ -4,8 +4,8 @@ import Svg, { Path } from "react-native-svg"
 const Password = ({iconColor}) => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
-    width={26}
-    height={26}
+    width={22}
+    height={22}
     fill={`${iconColor}`}
     stroke={`${iconColor}`}
     className="cf-icon-svg"
