@@ -103,7 +103,7 @@ export default function Assistance() {
                             setModalVisible(false);
                           }}
                         >
-                          <Text style={styles.optionText}>{carrera.nomCarrera}</Text>
+                          <Text style={selectedData.nomCarrera === carrera.nomCarrera ? styles.optionTextActive : styles.optionText}>{carrera.nomCarrera}</Text>
                         </TouchableOpacity>
                       ))}
                     </ScrollView>
@@ -182,6 +182,11 @@ const styles = StyleSheet.create({
   },
   optionText: {
     color: '#ffff',
+    fontSize: 18,
+    textAlign: 'center',
+  },
+  optionTextActive: {
+    color: 'rgb(252, 189, 27)',
     fontSize: 18,
     textAlign: 'center',
   },
