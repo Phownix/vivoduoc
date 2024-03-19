@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, View, ScrollView ,Text, StyleSheet } from 'react-native';
+import { ActivityIndicator, TouchableOpacity, TouchableWithoutFeedback ,Modal ,View, ScrollView ,Text, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import BackToHome from '../components/backToHome';
 import Nav from '../components/nav';
 
+import DropdownIcon from '../icons/dropdown'
+import DropdownReverseIcon from '../icons/dropdown-reverse'
+
 export default function Assistance() {
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedData, setSelectedData] = useState({});
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,8 +32,8 @@ export default function Assistance() {
 
           if (response.ok) {
             const jsonData = await response.json();
-            setData(jsonData[0]);
-            console.log(jsonData[0])
+            setSelectedData(jsonData[0]);
+            setData(jsonData);
           } else {
             console.error('Error al obtener los datos del alumno:', response.status);
           }
@@ -44,8 +49,8 @@ export default function Assistance() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <StatusBar style="dark"/>
+    <View style={{ flex: 1 }}>
+      <StatusBar style="dark" />
       <View style={styles.header}>
         <BackToHome>Asistencias</BackToHome>
       </View>
@@ -55,14 +60,52 @@ export default function Assistance() {
         </ScrollView>
       ) : (
         <ScrollView>
-          <View style={styles.titleHeader}>
-            <Text style={styles.titleHeaderText}>
-              {data.nomCarrera}
-            </Text>
-          </View>
+          <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.titleHeaderContent}>
+            <View style={styles.titleHeader}>
+              <Text style={styles.titleHeaderText}>{selectedData.nomCarrera}</Text>
+              <View style={{ marginTop: modalVisible ? 0:5 }}>
+                {modalVisible ? <DropdownReverseIcon/>:<DropdownIcon />}
+              </View>
+            </View>
+          </TouchableOpacity>
+
+
+          {/* El modal dejalo asi en el fondo */}
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+              <View style={styles.modalOverlay}>
+                <View style={styles.optionsContainer}>
+                  <View style={styles.modalContent}>
+                    <Text style={styles.titleModal}>Selecciona una carrera:</Text>
+                    <ScrollView style={{marginTop: 10}}>
+                      {data.map((carrera, index) => (
+                        <TouchableOpacity
+                          key={index}
+                          style={styles.optionBtn}
+                          onPress={() => {
+                            setSelectedData(carrera);
+                            setModalVisible(false);
+                          }}
+                        >
+                          <Text style={styles.optionText}>{carrera.nomCarrera}</Text>
+                        </TouchableOpacity>
+                      ))}
+                    </ScrollView>
+                  </View>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          </Modal>
         </ScrollView>
       )}
-      <Nav/>
+      <Nav />
     </View>
   );
 }
@@ -79,7 +122,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
     paddingHorizontal: 10,
   },
-  titleHeader: {
+  titleHeaderContent:{
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
@@ -87,16 +130,50 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 10,
   },
-  titleHeaderText: {
-    backgroundColor: '#012C56',
+  titleHeader: {
     width: '90%',
-    textAlign: 'center',
+    backgroundColor: '#012C56',
+    borderRadius: 10,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  titleHeaderText: {
     padding: 8,
     borderRadius: 10,
     color: '#ffff',
     fontSize: 15,
   },
-  main: {
-    paddingHorizontal: 10,
-  },	
+  modalOverlay: {
+    height: '100%',
+  },
+  optionsContainer:{
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 120,
+  },
+  modalContent: {
+    backgroundColor: '#012C56',
+    height: 200,
+    width: '90%',
+    borderRadius: 10,
+    padding: 10,
+  },
+  titleModal: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#ffff',
+    textAlign: 'center',
+  },
+  optionBtn: {
+    paddingVertical: 5,
+  },
+  optionText: {
+    color: '#ffff',
+    fontSize: 18,
+    textAlign: 'center',
+  }
 })

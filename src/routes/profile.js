@@ -10,6 +10,7 @@ import Nav from '../components/nav';
 export default function Profile() {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,12 +33,14 @@ export default function Profile() {
             console.log('Datos del alumno:', jsonData);
           } else {
             console.error('Error al obtener los datos del alumno:', response.status);
+            setError(true);
           }
         }
       } catch (error) {
         console.error('Error al realizar la solicitud:', error);
+        setError(true);
       } finally {
-        setLoading(false); // Finaliza el estado de carga, independientemente del resultado
+        setLoading(false);
       }
     };
 
@@ -45,16 +48,10 @@ export default function Profile() {
   }, []);
 
   function formatearRUT(rut) {
-    // Eliminar caracteres que no sean números ni el guion
     rut = rut.replace(/[^\dKk]/g, '');
-    
-    // Separar el RUT y el dígito verificador
     var rutSinDV = rut.slice(0, -1);
     var dv = rut.slice(-1).toUpperCase();
-    
-    // Formatear el RUT con puntos y el guion
     rutFormateado = rutSinDV.replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '-' + dv;
-    
     return rutFormateado;
   }
 
@@ -71,34 +68,40 @@ export default function Profile() {
         <BackToHome>Perfil Duoc</BackToHome>
         <Logout/>
       </View>
-      {loading ? ( // Verifica si se está cargando, muestra un indicador de carga
+      {error ? (
         <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <ActivityIndicator size="large" color="rgb(252, 189, 27)" />
+          <Text style={styles.errorText}>No se ha podido conectar con el servidor de DuocUc. Por favor, inténtelo de nuevo más tarde.</Text>
         </ScrollView>
-      ) : ( // Si no hay datos o no se pudo cargar, no renderiza
-        data && data.nombreCompleto && (
-          <>
-            <View style={styles.profileContent}>
-              <Image
-                style={styles.profileImage}
-                source={require('../../assets/profile.png')}
-              />
-              <View>
-                <Text style={styles.profileName}>{data?.nombreCompleto}</Text>
-                <Text style={styles.profileRut}>{rutFormateado}</Text>
-                <Text style={styles.profileCareer}>{data?.carreras[0].nomCarrera}</Text>
-              </View>
-            </View>
-            <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 70 }}>
-              <View style={styles.contentCode}>
-                <Text style={styles.credential}>Credencial Virtual</Text>
-                <Barcode
-                  value={`${data.rut}`}
-                  options={{ format: 'CODE128', displayValue: 'false'  }}
+      ) : (
+        loading ? (
+          <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator size="large" color="rgb(252, 189, 27)" />
+          </ScrollView>
+        ) : (
+          data && data.nombreCompleto && (
+            <>
+              <View style={styles.profileContent}>
+                <Image
+                  style={styles.profileImage}
+                  source={require('../../assets/profile.png')}
                 />
+                <View>
+                  <Text style={styles.profileName}>{data?.nombreCompleto}</Text>
+                  <Text style={styles.profileRut}>{rutFormateado}</Text>
+                  <Text style={styles.profileCareer}>{data?.carreras[0].nomCarrera}</Text>
+                </View>
               </View>
-            </ScrollView>
-          </>
+              <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 70 }}>
+                <View style={styles.contentCode}>
+                  <Text style={styles.credential}>Credencial Virtual</Text>
+                  <Barcode
+                    value={`${data.rut}`}
+                    options={{ format: 'CODE128', displayValue: 'false'  }}
+                  />
+                </View>
+              </ScrollView>
+            </>
+          )
         )
       )}
       <Nav/>
