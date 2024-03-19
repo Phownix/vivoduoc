@@ -69,6 +69,15 @@ export default function Assistance() {
             </View>
           </TouchableOpacity>
 
+          <View style={styles.asigMain}>
+            {selectedData.asistenciaAsignaturas.map((asignatura, index) => (
+              <View key={index} style={styles.asignatureContainer}>
+                <Text style={styles.titleAsignature}>{asignatura.cabecera.nomAsignatura}</Text>
+                <Text style={styles.subAsiganute}>{asignatura.cabecera.codAsignatura}</Text>
+                <Text style={styles.porcentajeAsignature}>{asignatura.cabecera.porcentaje}% ({asignatura.cabecera.clasesRealizadas} de {asignatura.cabecera.clasesAsistente} clases)</Text>
+              </View>
+            ))}
+          </View>
 
           {/* El modal dejalo asi en el fondo */}
           <Modal
@@ -175,5 +184,35 @@ const styles = StyleSheet.create({
     color: '#ffff',
     fontSize: 18,
     textAlign: 'center',
+  },
+  asigMain: {
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  asignatureContainer: {
+    borderLeftColor: '#012C56',
+    borderLeftWidth: 5,
+    borderBottomColor: '#012C56',
+    borderBottomWidth: 2,
+    marginTop: 7,
+    marginBottom: 7,
+    width: '90%',
+    padding: 10,
+    borderRadius: 10,
+  },
+  titleAsignature: {
+    fontWeight: 'bold',
+    paddingBottom: 2,
+  },
+  subAsiganute: {
+    color: '#737373',
+    fontSize: 12,
+  },
+  porcentajeAsignature: {
+    paddingTop: 2,
   }
 })
