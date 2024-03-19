@@ -60,10 +60,12 @@ const styles = StyleSheet.create({
     btn: {
         height: 100,
         width: 64,
+        padding: 8,
+        flexDirection: 'column',
+        alignContent: 'center',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
-        padding: 8,
     },
     btnActive: {
         height: 100,

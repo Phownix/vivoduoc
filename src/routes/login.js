@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View,Image, TouchableOpacity, TextInput, Text, ScrollView , StyleSheet} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
@@ -17,21 +18,7 @@ const Login = () => {
       try {
         const token = await AsyncStorage.getItem('access_token');
         if (token) {
-          const profileResponse = await fetchProfile(token);
-          if (profileResponse && profileResponse.ok) {
-            const profileData = await profileResponse.json();
-            if (profileData && profileData.idAlumno && profileData.codAlumno && profileData.rut) {
-              navigation.navigate('Home');
-              return;
-            }
-            console.log('El perfil no contiene los datos necesarios');
-          } else {
-            console.log('Error al obtener la información del perfil');
-            await AsyncStorage.removeItem('access_token');
-            await AsyncStorage.removeItem('idAlumno');
-            await AsyncStorage.removeItem('codAlumno');
-            await AsyncStorage.removeItem('rut');
-          }
+          navigation.navigate('Home');
         } else {
           console.log('No se encontró ningún token en AsyncStorage');
         }
@@ -189,7 +176,7 @@ export default Login;
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
+    height: vh(105),
     backgroundColor: 'black',
   },
   inputContainer: {

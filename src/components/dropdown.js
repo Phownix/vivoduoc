@@ -93,8 +93,6 @@ const styles = StyleSheet.create({
     color: 'rgb(252, 189, 27)',
     fontSize: 18,
     fontWeight: 'bold',
-    borderBottomWidth: 2,
-    borderBottomColor: 'rgb(252, 189, 27)',
     width: '100%',
     textAlign: 'center',
     paddingVertical: 10,

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, View, ScrollView ,Text, Image, StyleSheet } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Barcode } from 'expo-barcode-generator';
 import BackToHome from '../components/backToHome';
@@ -65,6 +66,7 @@ export default function Profile() {
 
   return (
     <View style={styles.container}>
+      <StatusBar style="dark"/>
       <View style={styles.header}>
         <BackToHome>Perfil Duoc</BackToHome>
         <Logout/>
@@ -87,7 +89,7 @@ export default function Profile() {
                 <Text style={styles.profileCareer}>{data?.carreras[0].nomCarrera}</Text>
               </View>
             </View>
-            <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 70 }}>
               <View style={styles.contentCode}>
                 <Text style={styles.credential}>Credencial Virtual</Text>
                 <Barcode
@@ -136,12 +138,12 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   profileName: {
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: 'bold',
     width: 200
   },
   profileRut: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
     marginTop: 5,
   },

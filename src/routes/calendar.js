@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ActivityIndicator, View ,ScrollView, Text, StyleSheet } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import * as FileSystem from 'expo-file-system';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackToHome from '../components/backToHome';
@@ -12,7 +13,7 @@ const options = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'
 const Calendar = () => {
   const [horario, setHorario] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedDay, setSelectedDay] = useState('');
+  const [selectedDay, setSelectedDay] = useState('Semana');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,6 +83,7 @@ const Calendar = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar style="dark"/>
       <View style={styles.header}>
         <BackToHome style={styles.backText}>Horario</BackToHome>
         {horario && horario.nomCarrera && <Dropdown options={options} selectedValue={selectedDay} onValueChange={handleDropdownChange} />}

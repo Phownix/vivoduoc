@@ -1,6 +1,7 @@
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { StatusBar } from 'expo-status-bar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Login from './login';
 import Home from './home';
 import Calendar from './calendar';
@@ -11,11 +12,25 @@ import Profile from './profile';
 const Stack = createStackNavigator();
 
 export default function Routes() {
+    const [tokenExists, setTokenExists] = useState(false);
+    
+    useEffect(() => {
+        checkTokenAndNavigate();
+    }, []);
+
+    const checkTokenAndNavigate = async () => {
+        try {
+            const token = await AsyncStorage.getItem('access_token');
+            setTokenExists(!!token); // !!token convierte el valor de token en un booleano
+        } catch (error) {
+            console.error('Error al verificar el token:', error);
+        }
+    };
+
     return (
         <NavigationContainer>
-            <StatusBar style="dark"/>
             <Stack.Navigator
-                initialRouteName="Login"
+                initialRouteName={tokenExists ? "Home" : "Login"}
                 screenOptions={{ 
                     headerShown: false, 
                     animationEnabled: false,
