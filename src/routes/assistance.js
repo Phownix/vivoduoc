@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, TouchableOpacity, TouchableWithoutFeedback ,Modal ,View, ScrollView ,Text, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import BackToHome from '../components/backToHome';
@@ -9,11 +10,13 @@ import Nav from '../components/nav';
 import DropdownIcon from '../icons/dropdown'
 import DropdownReverseIcon from '../icons/dropdown-reverse'
 
-export default function Assistance() {
+export default function Assistance () {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedData, setSelectedData] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
+  const [error, setError] = useState(false);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,8 +43,14 @@ export default function Assistance() {
         }
       } catch (error) {
         console.error('Error al realizar la solicitud:', error);
+        setError(true);
+        await AsyncStorage.removeItem('access_token');
+        await AsyncStorage.removeItem('idAlumno');
+        await AsyncStorage.removeItem('codAlumno');
+        await AsyncStorage.removeItem('rut');
+        navigation.navigate('Login');
       } finally {
-        setLoading(false); // Finaliza el estado de carga, independientemente del resultado
+        setLoading(false);
       }
     };
 
@@ -54,65 +63,70 @@ export default function Assistance() {
       <View style={styles.header}>
         <BackToHome>Asistencias</BackToHome>
       </View>
-      {loading ? (
+      {error && selectedData ? (
         <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <ActivityIndicator size="large" color="rgb(252, 189, 27)" />
+          <Text style={styles.errorText}>No se ha podido conectar con el servidor de DuocUc. Por favor, inténtelo de nuevo más tarde.</Text>
         </ScrollView>
       ) : (
-        <ScrollView>
-          <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.titleHeaderContent}>
-            <View style={styles.titleHeader}>
-              <Text style={styles.titleHeaderText}>{selectedData.nomCarrera}</Text>
-              <View style={{ marginTop: modalVisible ? 0:5 }}>
-                {modalVisible ? <DropdownReverseIcon/>:<DropdownIcon />}
-              </View>
-            </View>
-          </TouchableOpacity>
-
-          <View style={styles.asigMain}>
-            {selectedData.asistenciaAsignaturas.map((asignatura, index) => (
-              <View key={index} style={styles.asignatureContainer}>
-                <Text style={styles.titleAsignature}>{asignatura.cabecera.nomAsignatura}</Text>
-                <Text style={styles.subAsiganute}>{asignatura.cabecera.codAsignatura}</Text>
-                <Text style={styles.porcentajeAsignature}>{asignatura.cabecera.porcentaje}% ({asignatura.cabecera.clasesRealizadas} de {asignatura.cabecera.clasesAsistente} clases)</Text>
-              </View>
-            ))}
-          </View>
-
-          {/* El modal dejalo asi en el fondo */}
-          <Modal
-            animationType="fade"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(!modalVisible);
-            }}
-          >
-            <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-              <View style={styles.modalOverlay}>
-                <View style={styles.optionsContainer}>
-                  <View style={styles.modalContent}>
-                    <Text style={styles.titleModal}>Selecciona una carrera:</Text>
-                    <ScrollView style={{marginTop: 10}}>
-                      {data.map((carrera, index) => (
-                        <TouchableOpacity
-                          key={index}
-                          style={styles.optionBtn}
-                          onPress={() => {
-                            setSelectedData(carrera);
-                            setModalVisible(false);
-                          }}
-                        >
-                          <Text style={selectedData.nomCarrera === carrera.nomCarrera ? styles.optionTextActive : styles.optionText}>{carrera.nomCarrera}</Text>
-                        </TouchableOpacity>
-                      ))}
-                    </ScrollView>
-                  </View>
+        loading ? (
+          <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator size="large" color="rgb(252, 189, 27)" />
+          </ScrollView>
+        ) : (
+          <ScrollView>
+            <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.titleHeaderContent}>
+              <View style={styles.titleHeader}>
+                <Text style={styles.titleHeaderText}>{selectedData.nomCarrera}</Text>
+                <View style={{ marginTop: modalVisible ? 0 : 5 }}>
+                  {modalVisible ? <DropdownReverseIcon /> : <DropdownIcon />}
                 </View>
               </View>
-            </TouchableWithoutFeedback>
-          </Modal>
-        </ScrollView>
+            </TouchableOpacity>
+
+            <View style={styles.asigMain}>
+              {selectedData.asistenciaAsignaturas && selectedData.asistenciaAsignaturas.map((asignatura, index) => (
+                <View key={index} style={styles.asignatureContainer}>
+                  <Text style={styles.titleAsignature}>{asignatura.cabecera.nomAsignatura}</Text>
+                  <Text style={styles.subAsiganute}>{asignatura.cabecera.codAsignatura}</Text>
+                  <Text style={styles.porcentajeAsignature}>{asignatura.cabecera.porcentaje}% ({asignatura.cabecera.clasesRealizadas} de {asignatura.cabecera.clasesAsistente} clases)</Text>
+                </View>
+              ))}
+            </View>
+
+            <Modal
+              animationType="fade"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+                <View style={styles.modalOverlay}>
+                  <View style={styles.optionsContainer}>
+                    <View style={styles.modalContent}>
+                      <Text style={styles.titleModal}>Selecciona una carrera:</Text>
+                      <ScrollView style={{ marginTop: 10 }}>
+                        {data.map((carrera, index) => (
+                          <TouchableOpacity
+                            key={index}
+                            style={styles.optionBtn}
+                            onPress={() => {
+                              setSelectedData(carrera);
+                              setModalVisible(false);
+                            }}
+                          >
+                            <Text style={selectedData.nomCarrera === carrera.nomCarrera ? styles.optionTextActive : styles.optionText}>{carrera.nomCarrera}</Text>
+                          </TouchableOpacity>
+                        ))}
+                      </ScrollView>
+                    </View>
+                  </View>
+                </View>
+              </TouchableWithoutFeedback>
+            </Modal>
+          </ScrollView>
+        )
       )}
       <Nav />
     </View>

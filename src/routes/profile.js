@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, View, ScrollView ,Text, Image, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Barcode } from 'expo-barcode-generator';
 import BackToHome from '../components/backToHome';
@@ -11,6 +12,7 @@ export default function Profile() {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,6 +36,11 @@ export default function Profile() {
           } else {
             console.error('Error al obtener los datos del alumno:', response.status);
             setError(true);
+            await AsyncStorage.removeItem('access_token');
+            await AsyncStorage.removeItem('idAlumno');
+            await AsyncStorage.removeItem('codAlumno');
+            await AsyncStorage.removeItem('rut');
+            navigation.navigate('Login');
           }
         }
       } catch (error) {
@@ -163,5 +170,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginVertical: 10,
+  },
+  errorText: {
+    fontSize: 16,
+    textAlign: 'center',
+    paddingHorizontal: 10,
   }
 })
