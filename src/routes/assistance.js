@@ -85,11 +85,11 @@ export default function Assistance () {
 
             <View style={styles.asigMain}>
               {selectedData.asistenciaAsignaturas && selectedData.asistenciaAsignaturas.map((asignatura, index) => (
-                <View key={index} style={styles.asignatureContainer}>
+                <TouchableOpacity key={index} style={styles.asignatureContainer}>
                   <Text style={styles.titleAsignature}>{asignatura.cabecera.nomAsignatura}</Text>
                   <Text style={styles.subAsiganute}>{asignatura.cabecera.codAsignatura}</Text>
                   <Text style={styles.porcentajeAsignature}>{asignatura.cabecera.porcentaje}% ({asignatura.cabecera.clasesRealizadas} de {asignatura.cabecera.clasesAsistente} clases)</Text>
-                </View>
+                </TouchableOpacity>
               ))}
             </View>
 
