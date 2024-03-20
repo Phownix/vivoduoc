@@ -173,23 +173,26 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   classItem: {
-    paddingVertical: 8,
+    borderLeftColor: '#012C56',
+    borderLeftWidth: 5,
     borderBottomColor: '#012C56',
     borderBottomWidth: 2,
-    borderLeftColor: '#012C56',
+    marginTop: 7,
+    marginBottom: 7,
+    width: '90%',
+    padding: 10,
+    borderRadius: 10,
   },
   hour: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '900',
-    paddingVertical: 2,
   },
   className: { 
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
-    paddingVertical: 5,
   },
   subText: {
-    fontSize: 14,
+    fontSize: 11,
     paddingVertical: 2,
   },
   noClasses: {

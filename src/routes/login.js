@@ -22,23 +22,6 @@ const Login = () => {
 
   const navigation = useNavigation();
 
-  useEffect(() => {
-    const checkTokenAndNavigate = async () => {
-      try {
-        const token = await AsyncStorage.getItem('access_token');
-        if (token) {
-          navigation.navigate('Home');
-        } else {
-          console.log('No se encontró ningún token en AsyncStorage');
-        }
-      } catch (error) {
-        console.error('Error al verificar el token:', error);
-      }
-    };
-  
-    checkTokenAndNavigate();
-  }, []);
-
   const fetchProfile = async (token) => {
     const urlValidate = process.env.EXPO_PUBLIC_VALIDATE_USER;
     try {
@@ -117,6 +100,7 @@ const Login = () => {
       }
 
       const profileData = await profileResponse.json();
+      console.log(profileData)
       if (!profileData || !profileData.idAlumno || !profileData.codAlumno || !profileData.rut) {
         console.log('El perfil no contiene los datos necesarios');
         setLoading(false); 
