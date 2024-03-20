@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import ProfileIco from '../icons/profile';
 import PasswordIco from '../icons/password'
+import LoginIcon from '../icons/login'
 import Test from '../icons/test'
 
 const Login = () => {
@@ -204,7 +205,14 @@ const Login = () => {
               <ActivityIndicator size="small" color="white" />
             </Text>
             :
-            <Text style={styles.loginText}>Iniciar Sesión</Text>
+            <>
+              <View style={styles.loginIcon}>
+                <LoginIcon/>
+              </View>
+              <Text style={styles.loginText}>
+                  Iniciar Sesión
+              </Text>
+            </>
           }
         </TouchableOpacity>
       </ScrollView>
@@ -295,7 +303,13 @@ const styles = StyleSheet.create({
     borderColor: 'rgb(252, 189, 27)',
     borderWidth: 2,
     borderRadius: 7,
-    marginTop: 15
+    marginTop: 15,
+    position: 'relative',
+  },
+  loginIcon: {
+    position: 'absolute',
+    left: 10,
+    top: 5,
   },
   loginText: {
     color: 'white',
