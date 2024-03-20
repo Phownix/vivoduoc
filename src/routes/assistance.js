@@ -26,6 +26,7 @@ export default function Assistance () {
 
         if (token && codAlumno) {
           const urlAssistance = process.env.EXPO_PUBLIC_ASSISTANCE_ENDPOINT;
+          
           const response = await fetch(`${urlAssistance}=${codAlumno}`, {
             method: 'GET',
             headers: {

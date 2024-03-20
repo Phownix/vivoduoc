@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {ActivityIndicator, View, Image, TouchableOpacity, TextInput, Text, ScrollView, StyleSheet} from 'react-native';
 import { ALERT_TYPE, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
+import Animated, { useSharedValue, withSpring, useAnimatedStyle, interpolate, Extrapolate } from 'react-native-reanimated';
 import Checkbox from 'expo-checkbox';
 import { StatusBar } from 'expo-status-bar';
 import { vh } from 'react-native-expo-viewport-units';
@@ -19,12 +20,36 @@ const Login = () => {
   const [passwordFocused, setPasswordFocused] = useState(false);
   const [isSaveSession, setSaveSession] = useState(false);
   const [loading, setLoading] = useState(false);
+  const scale = useSharedValue(0.5); 
+  const translateY = useSharedValue(-100);
+  const opacity = useSharedValue(0); 
 
   const navigation = useNavigation();
 
+  useEffect(() => {
+    scale.value = withSpring(1);
+    translateY.value = withSpring(0, { damping: 10, stiffness: 100 });
+    opacity.value = withSpring(1, { damping: 10, stiffness: 100 });
+  }, []);
+
+  // Estilo animado que se aplicará al View
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scale.value }],
+    };
+  });
+
+  const animatedTopStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: translateY.value }],
+      opacity: interpolate(opacity.value, [0, 1], [0, 1], Extrapolate.CLAMP),
+    };
+  });
+
   const fetchProfile = async (token) => {
-    const urlValidate = process.env.EXPO_PUBLIC_VALIDATE_USER;
     try {
+      const urlValidate = process.env.EXPO_PUBLIC_VALIDATE_USER;
+
       return await fetch(`${urlValidate}=${username}`, {
         method: 'GET',
         headers: {
@@ -49,6 +74,7 @@ const Login = () => {
       };
 
       let formBody = [];
+
       for (let property in details) {
         let encodedKey = encodeURIComponent(property);
         let encodedValue = encodeURIComponent(details[property]);
@@ -57,8 +83,6 @@ const Login = () => {
       formBody = formBody.join('&');
 
       const urlLogin = process.env.EXPO_PUBLIC_LOGIN_ENDPOINT;
-
-      console.log(urlLogin)
 
       const response = await fetch(`${urlLogin}`, {
         method: 'POST',
@@ -133,73 +157,77 @@ const Login = () => {
   return (
     <View style={styles.container}>
       <StatusBar style="light" backgroundColor='#184f8a'/>
-      <AlertNotificationRoot>
-      <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 50 }}>
-      <View style={styles.logoVivoDuoc}>
-        <Image 
-          source={require('../../assets/logo_vivoduoc.png')}
-          style={{ width: 185, height: 43 }}
-        />
-      </View>
-        <View>
-          <Text style={usernameFocused || username ? styles.inputTextSelected : styles.inputText}>
-              Correo
-          </Text>
-          <View style={styles.inputContainer}>
-            <TextInput 
-              style={usernameFocused || username ? styles.inputSelected : styles.input}
-              onChangeText={(text) => setUsername(text)}
-              value={username}
-              onFocus={() => setUsernameFocused(true)}
-              onBlur={() => setUsernameFocused(false)}
-            />
-            <View style={styles.Icon}>
-              <ProfileIco widthIcon={22} heightIcon={22} iconColor={`${usernameFocused || username ? "rgb(252, 189, 27)":"white"}`}/>
-            </View>
+      <AlertNotificationRoot theme="light">
+        <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 50 }}>
+          <View style={styles.logoVivoDuoc}>
+            <Animated.View style={[animatedStyle]}>
+              <Image 
+                source={require('../../assets/logo_vivoduoc.png')}
+                style={{ width: 185, height: 43 }}
+              />
+            </Animated.View>
           </View>
-          <Text style={passwordFocused || password ? styles.inputTextSelected : styles.inputText}>
-              Contraseña
-          </Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={passwordFocused || password ? styles.inputSelected : styles.input}
-              onChangeText={(text) => setPassword(text)}
-              value={password}
-              secureTextEntry={true}
-              onFocus={() => setPasswordFocused(true)}
-              onBlur={() => setPasswordFocused(false)}
-            />
+          <View>
+            <Animated.Text style={[usernameFocused || username ? styles.inputTextSelected : styles.inputText, animatedStyle]}>
+                  Correo
+            </Animated.Text>
+            <Animated.View style={[styles.inputContainer, animatedStyle]}>
+              <TextInput 
+                style={usernameFocused || username ? styles.inputSelected : styles.input}
+                onChangeText={(text) => setUsername(text)}
+                value={username}
+                onFocus={() => setUsernameFocused(true)}
+                onBlur={() => setUsernameFocused(false)}
+              />
+              <View style={styles.Icon}>
+                <ProfileIco widthIcon={22} heightIcon={22} iconColor={`${usernameFocused || username ? "rgb(252, 189, 27)":"white"}`}/>
+              </View>
+            </Animated.View>
+            <Text style={passwordFocused || password ? styles.inputTextSelected : styles.inputText}>
+                Contraseña
+            </Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={passwordFocused || password ? styles.inputSelected : styles.input}
+                onChangeText={(text) => setPassword(text)}
+                value={password}
+                secureTextEntry={true}
+                onFocus={() => setPasswordFocused(true)}
+                onBlur={() => setPasswordFocused(false)}
+              />
             <View style={styles.Icon}>
               <PasswordIco iconColor={`${passwordFocused || password ? "rgb(252, 189, 27)":"white"}`}/>
             </View>
           </View>
         </View>
-        <View style={styles.saveSessionContent}>
-          <Checkbox
-            style={styles.saveSessionCheckbox}
-            value={isSaveSession}
-            onValueChange={setSaveSession}
-            color={isSaveSession ? 'rgb(252, 189, 27)' : undefined}
-          />
-          <Text style={styles.saveSessionText}>Permanecer conectado</Text>
-        </View>
-        <TouchableOpacity style={!username || !password ? styles.loginDisabled : styles.loginBtn} onPress={postData}  disabled={!username || !password} >
-          {loading ?
-            <Text style={styles.loginText}>
-              <ActivityIndicator size="small" color="white" />
-            </Text>
-            :
-            <>
-              <View style={styles.loginIcon}>
-                <LoginIcon/>
-              </View>
-              <Text style={styles.loginText}>
-                  Iniciar Sesión
-              </Text>
-            </>
-          }
-        </TouchableOpacity>
-      </ScrollView>
+          <View style={styles.saveSessionContent}>
+            <Checkbox
+              style={styles.saveSessionCheckbox}
+              value={isSaveSession}
+              onValueChange={setSaveSession}
+              color={isSaveSession ? 'rgb(252, 189, 27)' : undefined}
+            />
+            <Text style={styles.saveSessionText}>Permanecer conectado</Text>
+          </View>
+          <Animated.View style={[animatedTopStyle]}>
+            <TouchableOpacity style={!username || !password ? styles.loginDisabled : styles.loginBtn} onPress={postData}  disabled={!username || !password} >
+              {loading ?
+                <Text style={styles.loginText}>
+                  <ActivityIndicator size="small" color="white" />
+                </Text>
+                :
+                <>
+                  <View style={styles.loginIcon}>
+                    <LoginIcon/>
+                  </View>
+                  <Text style={styles.loginText}>
+                      Iniciar Sesión
+                  </Text>
+                </>
+              }
+            </TouchableOpacity>
+          </Animated.View>
+        </ScrollView>
       </AlertNotificationRoot>
       <View style={styles.bg}>
         <Test/>

@@ -26,7 +26,8 @@ const Calendar = () => {
 
         if (token && id) {
           const urlCalendary = process.env.EXPO_PUBLIC_CALENDAR_ENDPOINT;
-          const response = await fetch(`${urlCalendary}=${id}`, {
+
+          const response = await fetch(`${urlCalendary}=${id}`,  {
             method: 'GET',
             headers: {
               Authorization: `Bearer ${token}`
