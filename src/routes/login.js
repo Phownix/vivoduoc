@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {ActivityIndicator, View, Image, TouchableOpacity, TextInput, Text, ScrollView, StyleSheet} from 'react-native';
 import { ALERT_TYPE, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
-import Animated, { useSharedValue, withSpring, useAnimatedStyle, interpolate, Extrapolate } from 'react-native-reanimated';
+import Animated, { useSharedValue, withSpring, useAnimatedStyle, interpolate, Extrapolate, withTiming } from 'react-native-reanimated';
 import Checkbox from 'expo-checkbox';
 import { StatusBar } from 'expo-status-bar';
 import { vh } from 'react-native-expo-viewport-units';
@@ -22,20 +22,31 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const scale = useSharedValue(0.5); 
   const translateY = useSharedValue(-100);
+  const translateYFade = useSharedValue(-20);
   const opacity = useSharedValue(0); 
+  const opacityFade = useSharedValue(0); 
 
   const navigation = useNavigation();
 
   useEffect(() => {
     scale.value = withSpring(1);
     translateY.value = withSpring(0, { damping: 10, stiffness: 100 });
+    translateYFade.value = withTiming(0, { duration: 1000 });
     opacity.value = withSpring(1, { damping: 10, stiffness: 100 });
+    opacityFade.value = withTiming(1, { duration: 1000 });
   }, []);
 
   // Estilo animado que se aplicará al View
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{ scale: scale.value }],
+    };
+  });
+
+  const animatedFade = useAnimatedStyle(() => {
+    return {
+      opacity: interpolate(opacityFade.value, [0, 1], [0, 1], Extrapolate.CLAMP),
+      transform: [{ translateY: translateYFade.value }],
     };
   });
 
@@ -168,10 +179,10 @@ const Login = () => {
             </Animated.View>
           </View>
           <View>
-            <Animated.Text style={[usernameFocused || username ? styles.inputTextSelected : styles.inputText, animatedStyle]}>
+            <Animated.Text style={[usernameFocused || username ? styles.inputTextSelected : styles.inputText, animatedFade]}>
                   Correo
             </Animated.Text>
-            <Animated.View style={[styles.inputContainer, animatedStyle]}>
+            <Animated.View style={[styles.inputContainer, animatedFade]}>
               <TextInput 
                 style={usernameFocused || username ? styles.inputSelected : styles.input}
                 onChangeText={(text) => setUsername(text)}
@@ -183,10 +194,10 @@ const Login = () => {
                 <ProfileIco widthIcon={22} heightIcon={22} iconColor={`${usernameFocused || username ? "rgb(252, 189, 27)":"white"}`}/>
               </View>
             </Animated.View>
-            <Text style={passwordFocused || password ? styles.inputTextSelected : styles.inputText}>
+            <Animated.Text style={[passwordFocused || password ? styles.inputTextSelected : styles.inputText, animatedFade]}>
                 Contraseña
-            </Text>
-            <View style={styles.inputContainer}>
+            </Animated.Text>
+            <Animated.View style={[styles.inputContainer, animatedFade]}>
               <TextInput
                 style={passwordFocused || password ? styles.inputSelected : styles.input}
                 onChangeText={(text) => setPassword(text)}
@@ -198,9 +209,9 @@ const Login = () => {
             <View style={styles.Icon}>
               <PasswordIco iconColor={`${passwordFocused || password ? "rgb(252, 189, 27)":"white"}`}/>
             </View>
-          </View>
+          </Animated.View>
         </View>
-          <View style={styles.saveSessionContent}>
+          <Animated.View style={[styles.saveSessionContent, animatedStyle]}>
             <Checkbox
               style={styles.saveSessionCheckbox}
               value={isSaveSession}
@@ -208,7 +219,7 @@ const Login = () => {
               color={isSaveSession ? 'rgb(252, 189, 27)' : undefined}
             />
             <Text style={styles.saveSessionText}>Permanecer conectado</Text>
-          </View>
+          </Animated.View>
           <Animated.View style={[animatedTopStyle]}>
             <TouchableOpacity style={!username || !password ? styles.loginDisabled : styles.loginBtn} onPress={postData}  disabled={!username || !password} >
               {loading ?
