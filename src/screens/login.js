@@ -10,6 +10,8 @@ import { useNavigation } from '@react-navigation/native';
 
 import ProfileIco from '../icons/profile';
 import PasswordIco from '../icons/password'
+import ViewIcon from '../icons/view'
+import View2Icon from '../icons/view2'
 import LoginIcon from '../icons/login'
 import Test from '../icons/test'
 
@@ -18,6 +20,8 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [usernameFocused, setUsernameFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
+  const [isViewPass, setIsViewPass] = useState(false);
+  const [isToken , setIsToken] = useState(false);
   const [isSaveSession, setSaveSession] = useState(false);
   const [loading, setLoading] = useState(false);
   const scale = useSharedValue(0.5); 
@@ -28,6 +32,29 @@ const Login = () => {
 
   const navigation = useNavigation();
 
+  if ( isToken === true ) {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Home' }],
+    });
+  }
+
+  useEffect(() => {
+    const checkTokenAndNavigate = async () => {
+      try {
+        const token = await AsyncStorage.getItem('access_token');
+        if (token) {
+          setIsToken(true);
+        }
+        setIsToken(false);
+      } catch (error) {
+
+      }
+    };
+  
+    checkTokenAndNavigate();
+  }, []);
+
   useEffect(() => {
     scale.value = withSpring(1);
     translateY.value = withSpring(0, { damping: 10, stiffness: 100 });
@@ -36,7 +63,6 @@ const Login = () => {
     opacityFade.value = withTiming(1, { duration: 1000 });
   }, []);
 
-  // Estilo animado que se aplicará al View
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{ scale: scale.value }],
@@ -56,6 +82,10 @@ const Login = () => {
       opacity: interpolate(opacity.value, [0, 1], [0, 1], Extrapolate.CLAMP),
     };
   });
+
+  function handleViewPass() {
+    setIsViewPass(!isViewPass);
+  }
 
   const fetchProfile = async (token) => {
     try {
@@ -114,7 +144,7 @@ const Login = () => {
             Toast.show({
               type: ALERT_TYPE.WARNING,
               title: 'Datos Incorrectos',
-              textBody: 'Usuario y/o contraseña incorrecta',
+              textBody: 'Su correo o contraseña ingresada es incorrecta',
             })
             setLoading(false); 
             return;
@@ -199,16 +229,23 @@ const Login = () => {
             </Animated.Text>
             <Animated.View style={[styles.inputContainer, animatedFade]}>
               <TextInput
-                style={passwordFocused || password ? styles.inputSelected : styles.input}
+                style={passwordFocused || password ? styles.inputPassSelected : styles.inputPass}
                 onChangeText={(text) => setPassword(text)}
                 value={password}
-                secureTextEntry={true}
+                secureTextEntry={isViewPass ? false:true}
                 onFocus={() => setPasswordFocused(true)}
                 onBlur={() => setPasswordFocused(false)}
               />
             <View style={styles.Icon}>
               <PasswordIco iconColor={`${passwordFocused || password ? "rgb(252, 189, 27)":"white"}`}/>
             </View>
+            {password.length >= 1 && <TouchableOpacity style={styles.IconView} onPress={handleViewPass}>
+              {isViewPass ? 
+                <View2Icon iconColor={`${passwordFocused || password ? "rgb(252, 189, 27)":"white"}`}/>
+                :
+                <ViewIcon iconColor={`${passwordFocused || password ? "rgb(252, 189, 27)":"white"}`}/>
+              }
+            </TouchableOpacity>}
           </Animated.View>
         </View>
           <Animated.View style={[styles.saveSessionContent, animatedStyle]}>
@@ -284,6 +321,34 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
   },
+  inputPass: {
+    width: 300,
+    height: 40,
+    backgroundColor: '#ffffff24',
+    paddingLeft: 40,
+    paddingRight: 45,
+    borderRadius: 6,
+    borderColor: '#adadada2',
+    borderLeftWidth: 3,
+    borderRightWidth: 3,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  inputPassSelected: {
+    width: 300,
+    height: 40,
+    backgroundColor: '#ffffff24',
+    paddingLeft: 40,
+    paddingRight: 45,
+    borderRadius: 6,
+    borderColor: 'rgb(252, 189, 27)',
+    borderLeftWidth: 3,
+    borderRightWidth: 3,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'white',
+  },
   inputTextSelected: {
     color: 'rgb(252, 189, 27)',
     fontSize: 18,
@@ -301,6 +366,18 @@ const styles = StyleSheet.create({
     left: 10,
     top: 10,
     opacity: .8,
+  },
+  IconView: {
+    position: 'absolute',
+    right: 5,
+    top: 0,
+    opacity: .8,
+    height: '100%',
+    width: 40,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   loginDisabled: {
     display: 'flex',
