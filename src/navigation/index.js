@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Login from './login';
-import Home from './home';
-import Calendar from './calendar';
-import Notes from './notes';
-import Assistance from './assistance';
-import Profile from './profile';
+import Login from '../screens/login';
+import Home from '../screens/home';
+import Calendar from '../screens/calendar';
+import Notes from '../screens/notes';
+import Assistance from '../screens/assistance';
+import Profile from '../screens/profile';
 
 const Stack = createStackNavigator();
 
