@@ -31,12 +31,9 @@ const Login = () => {
   const opacityFade = useSharedValue(0); 
 
   const navigation = useNavigation();
-
-  if ( isToken === true ) {
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Home' }],
-    });
+  
+  if (isToken) {
+    navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
   }
 
   useEffect(() => {
