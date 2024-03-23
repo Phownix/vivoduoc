@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import {  ActivityIndicator, View, ScrollView ,Text, Image, StyleSheet } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
+import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Barcode } from 'expo-barcode-generator';
 import VerifyToken from '../middleware/verifyToken';
@@ -13,6 +13,7 @@ export default function Profile() {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+
   const navigation = useNavigation();
 
   VerifyToken('Login');
@@ -38,16 +39,21 @@ export default function Profile() {
             console.log('Datos del alumno:', jsonData);
           } else {
             console.error('Error al obtener los datos del alumno:', response.status);
-            setError(true);
             await AsyncStorage.removeItem('access_token');
             await AsyncStorage.removeItem('idAlumno');
             await AsyncStorage.removeItem('codAlumno');
             await AsyncStorage.removeItem('rut');
-            navigation.navigate('Login');
+            navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
+            setError(true);
           }
         }
       } catch (error) {
         console.error('Error al realizar la solicitud:', error);
+        await AsyncStorage.removeItem('access_token');
+        await AsyncStorage.removeItem('idAlumno');
+        await AsyncStorage.removeItem('codAlumno');
+        await AsyncStorage.removeItem('rut');
+        navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
         setError(true);
       } finally {
         setLoading(false);

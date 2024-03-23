@@ -39,18 +39,17 @@ export default function Routes() {
             initialRouteName={initialRoute}
             screenOptions={{ 
                 headerShown: false, 
-                animationEnabled: false,
                 cardStyle: {
                     backgroundColor: '#fff',
                 },
             }}
         >
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Home" component={Home} />
-            <Stack.Screen name="Calendar" component={Calendar} />
-            <Stack.Screen name="Notes" component={Notes} />
-            <Stack.Screen name="Assistance" component={Assistance} />
-            <Stack.Screen name="Profile" component={Profile} />
+            <Stack.Screen name="Login" component={Login} options={{ animationEnabled: true }}/>
+            <Stack.Screen name="Home" component={Home}  options={{ animationEnabled: true }}/>
+            <Stack.Screen name="Calendar" component={Calendar} options={{ animationEnabled: false }}/>
+            <Stack.Screen name="Notes" component={Notes} options={{ animationEnabled: false }}/>
+            <Stack.Screen name="Assistance" component={Assistance} options={{ animationEnabled: false }}/>
+            <Stack.Screen name="Profile" component={Profile} options={{ animationEnabled: false }}/>
         </Stack.Navigator>
     );
 }

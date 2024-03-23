@@ -40,6 +40,11 @@ export default function Assistance () {
             setData(jsonData);
           } else {
             console.error('Error al obtener los datos del alumno:', response.status);
+            await AsyncStorage.removeItem('access_token');
+            await AsyncStorage.removeItem('idAlumno');
+            await AsyncStorage.removeItem('codAlumno');
+            await AsyncStorage.removeItem('rut');
+            navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
           }
         }
       } catch (error) {
@@ -49,7 +54,7 @@ export default function Assistance () {
         await AsyncStorage.removeItem('idAlumno');
         await AsyncStorage.removeItem('codAlumno');
         await AsyncStorage.removeItem('rut');
-        navigation.navigate('Login');
+        navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
       } finally {
         setLoading(false);
       }
