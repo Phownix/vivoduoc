@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ActivityIndicator, View, ScrollView ,Text, Image, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Barcode } from 'expo-barcode-generator';
+import VerifyToken from '../middleware/verifyToken';
 import BackToHome from '../components/backToHome';
 import Logout from '../components/logout'
 import Nav from '../components/nav';
@@ -13,6 +14,8 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const navigation = useNavigation();
+
+  VerifyToken('Login');
 
   useEffect(() => {
     const fetchData = async () => {

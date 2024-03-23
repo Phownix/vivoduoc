@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { View,Text, ScrollView, Image, StyleSheet,Linking,Button, TouchableOpacity } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 
 import Greeting from '../components/greeting';

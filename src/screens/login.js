@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {ActivityIndicator, View, Image, TouchableOpacity, TextInput, Text, ScrollView, StyleSheet} from 'react-native';
 import { ALERT_TYPE, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 import Animated, { useSharedValue, withSpring, useAnimatedStyle, interpolate, Extrapolate, withTiming } from 'react-native-reanimated';
@@ -7,6 +7,7 @@ import { StatusBar } from 'expo-status-bar';
 import { vh } from 'react-native-expo-viewport-units';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 
 import ProfileIco from '../icons/profile';
 import PasswordIco from '../icons/password'
@@ -31,26 +32,41 @@ const Login = () => {
   const opacityFade = useSharedValue(0); 
 
   const navigation = useNavigation();
-  
-  if (isToken) {
-    navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
-  }
 
-  useEffect(() => {
-    const checkTokenAndNavigate = async () => {
-      try {
-        const token = await AsyncStorage.getItem('access_token');
-        if (token) {
-          setIsToken(true);
-        }
-        setIsToken(false);
-      } catch (error) {
-
+  useFocusEffect(
+    useCallback(() => {
+      if (isToken) {
+        navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
       }
-    };
+    }, [isToken, navigation])
+  )
+
+  useFocusEffect(
+    useCallback(() => {
+      const checkTokenAndNavigate = async () => {
+        try {
+          const token = await AsyncStorage.getItem('access_token');
+          if (token) {
+            setIsToken(true);
+          }
+          setIsToken(false);
   
-    checkTokenAndNavigate();
-  }, []);
+          const savedSession = await AsyncStorage.getItem('isSaveSession');
+          if (savedSession === 'true') {
+            const savedUsername = await AsyncStorage.getItem('username');
+            const savedPassword = await AsyncStorage.getItem('password');
+            setUsername(savedUsername || '');
+            setPassword(savedPassword || '');
+            setSaveSession(savedSession);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      };
+    
+      checkTokenAndNavigate();
+    }, [])
+  );
 
   useEffect(() => {
     scale.value = withSpring(1);
@@ -174,11 +190,18 @@ const Login = () => {
       await AsyncStorage.setItem('codAlumno', profileData.codAlumno);
       await AsyncStorage.setItem('rut', profileData.rut);
 
-      
-      if (isSaveSession === true){
+            
+      if (isSaveSession){
         await AsyncStorage.setItem('isSaveSession', 'true');
         console.log('Sesión guardada')
       }
+
+      if (isSaveSession) {
+        await AsyncStorage.setItem('username', username);
+        await AsyncStorage.setItem('password', password);
+      }
+
+      setIsToken(true);
 
       setUsername('');
       setPassword('');
