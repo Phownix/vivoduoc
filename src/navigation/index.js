@@ -45,8 +45,8 @@ export default function Routes() {
                 },
             }}
         >
-            <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="Calendar" component={Calendar} />
             <Stack.Screen name="Notes" component={Notes} />
             <Stack.Screen name="Assistance" component={Assistance} />
