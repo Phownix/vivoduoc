@@ -16,7 +16,7 @@ const Logout = () => {
       await AsyncStorage.removeItem('rut');
 
       // Redirigir al usuario a la pantalla de inicio de sesión
-      navigation.navigate('Login');
+      navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
     }

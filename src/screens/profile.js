@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, View, ScrollView ,Text, Image, StyleSheet } from 'react-native';
+import {  ActivityIndicator, View, ScrollView ,Text, Image, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -91,15 +91,15 @@ export default function Profile() {
           data && data.nombreCompleto && (
             <>
               <View style={styles.profileContent}>
-                <Image
-                  style={styles.profileImage}
-                  source={require('../../assets/profile.png')}
-                />
                 <View>
                   <Text style={styles.profileName}>{data?.nombreCompleto}</Text>
                   <Text style={styles.profileRut}>{rutFormateado}</Text>
                   <Text style={styles.profileCareer}>{data?.carreras[0].nomCarrera}</Text>
                 </View>
+                <Image
+                  style={styles.profileImage}
+                  source={require('../../assets/profile.png')}
+                />
               </View>
               <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 70 }}>
                 <View style={styles.contentCode}>
@@ -139,10 +139,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 15,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     borderBottomColor: '#4a4a4a47',
     borderBottomWidth: 2,
-    padding:10,
+    paddingHorizontal:20,
+    paddingVertical: 10,
     
   },
   profileImage: {
@@ -153,7 +154,8 @@ const styles = StyleSheet.create({
   profileName: {
     fontSize: 18,
     fontWeight: 'bold',
-    width: 200
+    width: 220,
+    flexWrap: 'wrap',
   },
   profileRut: {
     fontSize: 14,

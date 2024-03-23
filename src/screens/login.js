@@ -22,7 +22,6 @@ const Login = () => {
   const [usernameFocused, setUsernameFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
   const [isViewPass, setIsViewPass] = useState(false);
-  const [isToken , setIsToken] = useState(false);
   const [isSaveSession, setSaveSession] = useState(false);
   const [loading, setLoading] = useState(false);
   const scale = useSharedValue(0.5); 
@@ -35,22 +34,13 @@ const Login = () => {
 
   useFocusEffect(
     useCallback(() => {
-      if (isToken) {
-        navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
-      }
-    }, [isToken, navigation])
-  )
-
-  useFocusEffect(
-    useCallback(() => {
       const checkTokenAndNavigate = async () => {
         try {
           const token = await AsyncStorage.getItem('access_token');
+
           if (token) {
-            setIsToken(true);
+            navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
           }
-          setIsToken(false);
-  
           const savedSession = await AsyncStorage.getItem('isSaveSession');
           if (savedSession === 'true') {
             const savedUsername = await AsyncStorage.getItem('username');
@@ -58,6 +48,9 @@ const Login = () => {
             setUsername(savedUsername || '');
             setPassword(savedPassword || '');
             setSaveSession(savedSession);
+          } else if (savedSession === 'false') {
+            await AsyncStorage.removeItem('username');
+            await AsyncStorage.removeItem('password');
           }
         } catch (error) {
           console.error('Error:', error);
@@ -193,21 +186,19 @@ const Login = () => {
             
       if (isSaveSession){
         await AsyncStorage.setItem('isSaveSession', 'true');
-        console.log('Sesión guardada')
-      }
-
-      if (isSaveSession) {
         await AsyncStorage.setItem('username', username);
         await AsyncStorage.setItem('password', password);
+        console.log('Sesión guardada')
+      } else {
+        await AsyncStorage.setItem('isSaveSession', 'false');
+        console.log('Sesión no guardada')
       }
-
-      setIsToken(true);
 
       setUsername('');
       setPassword('');
 
       // Navegar a Home
-      navigation.navigate('Home');
+      navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
       setLoading(false); 
     } catch (error) {
       console.error('Error en el inicio de sesión:', error);
