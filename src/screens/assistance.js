@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, TouchableWithoutFeedback ,Modal ,View, ScrollView ,Text, StyleSheet } from 'react-native';
-import LoadingDots from "react-native-loading-dots";
+import Loading from '../components/loading';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -77,10 +77,7 @@ export default function Assistance () {
       ) : (
         loading ? (
           <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <View style={{width: 130}}>
-              <LoadingDots colors={["#012C56", "#003e7d", "#004a95", "#005cb8"]}/>
-              <Text style={{marginTop: 30, textAlign: 'center'}}>Cargando...</Text>
-            </View>
+            <Loading />
           </ScrollView>
         ) : (
           <ScrollView>

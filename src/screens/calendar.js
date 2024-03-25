@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Text, StyleSheet } from 'react-native';
-import LoadingDots from "react-native-loading-dots";
+import Loading from '../components/loading';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import * as FileSystem from 'expo-file-system';
@@ -112,10 +112,7 @@ const Calendar = () => {
       ) : (
         loading ? (
           <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <View style={{width: 130}}>
-              <LoadingDots colors={["#012C56", "#003e7d", "#004a95", "#005cb8"]}/>
-              <Text style={{marginTop: 30, textAlign: 'center'}}>Cargando...</Text>
-            </View>
+            <Loading/>
           </ScrollView>
         ) : (
           horario && horario.nomCarrera && (
