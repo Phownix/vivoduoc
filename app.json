@@ -28,9 +28,6 @@
       "softwareKeyboardLayoutMode" : "pan",
       "package": "com.evairx.vivoduoc"
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
     "extra": {
       "eas": {
         "projectId": "ae9a11b7-d6b2-4edd-8306-8b31f0b96bed"

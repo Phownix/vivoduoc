@@ -163,7 +163,7 @@ const { styles } = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    '@media (max-width: 360px)': {
+    '@media (max-width: 390px)': {
       width: 80,
       height: 80,
     },
@@ -174,7 +174,7 @@ const { styles } = StyleSheet.create({
     '@media (max-width: 479px)': {
       width: 250,
     },
-    '@media (max-width: 360px)': {
+    '@media (max-width: 390px)': {
       width: 170,
     },
   },
