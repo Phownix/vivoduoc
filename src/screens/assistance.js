@@ -95,7 +95,7 @@ export default function Assistance () {
                 <TouchableOpacity key={index} style={styles.asignatureContainer}>
                   <Text style={styles.titleAsignature}>{asignatura.cabecera.nomAsignatura}</Text>
                   <Text style={styles.subAsiganute}>{asignatura.cabecera.codAsignatura}</Text>
-                  <Text style={styles.porcentajeAsignature}>{asignatura.cabecera.porcentaje}% ({asignatura.cabecera.clasesRealizadas} de {asignatura.cabecera.clasesAsistente} clases)</Text>
+                  <Text style={styles.porcentajeAsignature}>{asignatura.cabecera.porcentaje}% ({asignatura.cabecera.clasesAsistente} de {asignatura.cabecera.clasesRealizadas} clases)</Text>
                 </TouchableOpacity>
               ))}
             </View>

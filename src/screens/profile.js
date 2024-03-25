@@ -80,7 +80,7 @@ export default function Profile() {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="dark"/>
+       <StatusBar style="dark"/>
       <View style={styles.header}>
         <BackToHome>Perfil Duoc</BackToHome>
         <Logout/>
@@ -97,18 +97,19 @@ export default function Profile() {
         ) : (
           data && data.nombreCompleto && (
             <>
-              <View style={styles.profileContent}>
-                <View>
-                  <Text style={styles.profileName}>{data?.nombreCompleto}</Text>
-                  <Text style={styles.profileRut}>{rutFormateado}</Text>
-                  <Text style={styles.profileCareer}>{data?.carreras[0].nomCarrera}</Text>
+              <View style={styles.main}>
+                <View style={styles.profileContent}>
+                  <Image
+                    style={styles.profileImage}
+                    source={require('../../assets/profile.png')}
+                  />
+                  <View>
+                    <Text style={styles.profileName}>{data?.nombreCompleto}</Text>
+                    <Text style={styles.profileRut}>{rutFormateado}</Text>
+                  </View>
                 </View>
-                <Image
-                  style={styles.profileImage}
-                  source={require('../../assets/profile.png')}
-                />
               </View>
-              <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 70 }}>
+              <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 90 }}>
                 <View style={styles.contentCode}>
                   <Text style={styles.credential}>Credencial Virtual</Text>
                   <Barcode
@@ -146,23 +147,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 15,
     alignItems: 'center',
-    justifyContent: 'space-between',
-    borderBottomColor: '#4a4a4a47',
+    justifyContent: 'center',
+    borderColor: '#012C56',
+    borderRightWidth: 2,
+    borderLeftWidth: 2,
     borderBottomWidth: 2,
-    paddingHorizontal:20,
-    paddingVertical: 10,
-    
+    borderRadius: 10,
+    paddingVertical: 20,
+    marginTop: 20,
   },
   profileImage: {
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
     borderRadius: 50,
   },
   profileName: {
     fontSize: 18,
     fontWeight: 'bold',
-    width: 220,
-    flexWrap: 'wrap',
+    width: 200,
   },
   profileRut: {
     fontSize: 14,
