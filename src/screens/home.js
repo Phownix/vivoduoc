@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
-import { View,Text, ScrollView, Image, StyleSheet,Linking,Button, TouchableOpacity } from 'react-native';
+import { View,Text, ScrollView, Image,Linking,Button, TouchableOpacity } from 'react-native';
+import StyleSheet from 'react-native-media-query';
 import { StatusBar } from 'expo-status-bar';
 
 import Greeting from '../components/greeting';
@@ -58,7 +59,7 @@ export default function Home() {
   );
 }
 
-const styles = StyleSheet.create({
+const {styles} = StyleSheet.create({
   container: {
     height: '100%'
   },
@@ -75,6 +76,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
+    '@media (max-width: 479px)': {
+     
+    },
   },
   main: {
     paddingHorizontal: 10,

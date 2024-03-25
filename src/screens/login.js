@@ -41,8 +41,8 @@ const Login = () => {
           if(expired){
             Toast.show({
               type: ALERT_TYPE.WARNING,
-              title: 'Expiro la sesión',
-              textBody: 'Inicie sesion nuevamente',
+              title: 'Sesión expirada',
+              textBody: 'Por favor inicie sesión nuevamente',
             })
             await AsyncStorage.removeItem('expired');
           }

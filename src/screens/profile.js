@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { View, ScrollView ,Text, Image, StyleSheet,Alert } from 'react-native';
+import { View, ScrollView ,Text, Image,Alert } from 'react-native';
+import StyleSheet from 'react-native-media-query';
 import Constants from 'expo-constants';
 import Loading from '../components/loading';
 import { useNavigation } from '@react-navigation/native';
@@ -129,7 +130,7 @@ export default function Profile() {
   );
 }
 
-const styles = StyleSheet.create({
+const { styles } = StyleSheet.create({
   container: {
     height: '100%'
   },
@@ -159,14 +160,23 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   profileImage: {
-    width: 80,
-    height: 80,
+    width: 100,
+    height: 100,
     borderRadius: 50,
+    '@media (max-width: 360px)': {
+      width: 80,
+      height: 80,
+    },
   },
   profileName: {
     fontSize: 18,
     fontWeight: 'bold',
-    width: 200,
+    '@media (max-width: 479px)': {
+      width: 250,
+    },
+    '@media (max-width: 360px)': {
+      width: 170,
+    },
   },
   profileRut: {
     fontSize: 14,

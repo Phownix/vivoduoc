@@ -1,4 +1,5 @@
-import { View, Text,TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text,TouchableOpacity } from 'react-native'
+import StyleSheet from 'react-native-media-query';
 import { useNavigation, useRoute } from '@react-navigation/native'
 import HomeIcon from '../icons/home'
 import CalendarIcon from '../icons/calendar'
@@ -46,7 +47,7 @@ export default function Nav() {
     )
 }
 
-const styles = StyleSheet.create({
+const { styles } = StyleSheet.create({
     container: {
         width: '100%',
         backgroundColor: '#012C56',
