@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, ScrollView ,Text, Image, StyleSheet } from 'react-native';
+import { View, ScrollView ,Text, Image, StyleSheet,Alert } from 'react-native';
 import Constants from 'expo-constants';
 import Loading from '../components/loading';
 import { useNavigation } from '@react-navigation/native';
@@ -41,6 +41,7 @@ export default function Profile() {
             console.log('Datos del alumno:', jsonData);
           } else {
             console.error('Error al obtener los datos del alumno:', response.status);
+            await AsyncStorage.setItem('expired', 'true');
             await AsyncStorage.removeItem('access_token');
             await AsyncStorage.removeItem('idAlumno');
             await AsyncStorage.removeItem('codAlumno');
@@ -81,7 +82,7 @@ export default function Profile() {
 
   return (
     <View style={styles.container}>
-       <StatusBar style="dark"/>
+      <StatusBar style="dark"/>
       <View style={styles.header}>
         <BackToHome>Perfil Duoc</BackToHome>
         <Logout/>

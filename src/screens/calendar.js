@@ -51,6 +51,7 @@ const Calendar = () => {
           await FileSystem.writeAsStringAsync(filePath, JSON.stringify(jsonData));
         } else {
           console.error('Error al obtener los datos del alumno:', response.status);
+          await AsyncStorage.setItem('expired', 'true');
           await AsyncStorage.removeItem('access_token');
           await AsyncStorage.removeItem('idAlumno');
           await AsyncStorage.removeItem('codAlumno');

@@ -36,11 +36,25 @@ const Login = () => {
     useCallback(() => {
       const checkTokenAndNavigate = async () => {
         try {
+          const expired  = await AsyncStorage.getItem('expired');
+
+          if(expired){
+            Toast.show({
+              type: ALERT_TYPE.WARNING,
+              title: 'Expiro la sesión',
+              textBody: 'Inicie sesion nuevamente',
+            })
+            await AsyncStorage.removeItem('expired');
+          }
+
+          console.log(expired)
+
           const token = await AsyncStorage.getItem('access_token');
 
           if (token) {
             navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
           }
+
           const savedSession = await AsyncStorage.getItem('isSaveSession');
           if (savedSession === 'true') {
             const savedUsername = await AsyncStorage.getItem('username');
