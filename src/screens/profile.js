@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { View, ScrollView ,Text, Image, StyleSheet } from 'react-native';
+import Constants from 'expo-constants';
 import Loading from '../components/loading';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 50,
+    marginTop: Constants.statusBarHeight + 15,
     paddingHorizontal: 10,
   },
   main: {

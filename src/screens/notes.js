@@ -1,4 +1,5 @@
 import { View,ScrollView, Text, StyleSheet } from 'react-native';
+import Constants from 'expo-constants';
 import { StatusBar } from 'expo-status-bar';
 
 import BackToHome from '../components/backToHome';
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 50,
+    marginTop: Constants.statusBarHeight + 15,
     paddingHorizontal: 10,
   },
 })
