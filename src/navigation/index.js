@@ -10,7 +10,7 @@ import Profile from '../screens/profile';
 
 const Stack = createStackNavigator();
 
-export default function Routes() {
+export default function Navigation() {
     const [initialRoute, setInitialRoute] = useState('Login');
     const [loading, setLoading] = useState(true);
 
