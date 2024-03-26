@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Modal } from 'react-native';
+import StyleSheet from 'react-native-media-query';
 import Close from '../icons/close';
 
 const Dropdown = ({ options, selectedValue, onValueChange }) => {
@@ -43,19 +44,35 @@ const Dropdown = ({ options, selectedValue, onValueChange }) => {
   }
   
 
-const styles = StyleSheet.create({
+const { styles } = StyleSheet.create({
   button: {
-    height: 40,
     borderWidth: 2,
     borderRadius: 20,
     borderColor: '#012C56',
     justifyContent: 'center',
     alignItems: 'center',
-    width:100,
+    '@media (max-width: 1024px)': {
+      height: 50,
+      borderWidth: 3,
+      borderRadius: 50,
+      width:150,
+    },
+    '@media (max-width: 390px)': {
+      height: 40,
+      borderWidth: 2,
+      borderRadius: 20,
+      width:100,
+    },
   },
   textBtn: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    '@media (max-width: 1024px)': {
+      fontSize: 26,
+      fontWeight: '700',
+    },
+    '@media (max-width: 390px)': {
+      fontSize: 16,
+      fontWeight: '700',
+    },
   },
   modalContainer: {
     paddingHorizontal: 30,

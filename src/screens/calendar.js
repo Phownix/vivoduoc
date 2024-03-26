@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Text, StyleSheet } from 'react-native';
+import { View, ScrollView, Text } from 'react-native';
+import StyleSheet from 'react-native-media-query';
 import Constants from 'expo-constants';
 import Loading from '../components/loading';
 import { StatusBar } from 'expo-status-bar';
@@ -145,7 +146,7 @@ const Calendar = () => {
 
 export default Calendar;
 
-const styles = StyleSheet.create({
+const { styles }= StyleSheet.create({
   container: {
     height: '100%'
   },

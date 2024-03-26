@@ -1,11 +1,11 @@
 import * as React from "react"
+import StyleSheet from 'react-native-media-query';
 import Svg, { Path } from "react-native-svg"
 
 const Back = () => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
-    width={28}
-    height={28}
+    style={styles.main}
     stroke="#012C56"
     viewBox="-4.5 0 20 20"
   >
@@ -18,3 +18,16 @@ const Back = () => (
   </Svg>
 )
 export default Back
+
+const {styles} = StyleSheet.create({
+  main: {
+    '@media (max-width: 1024px)': {
+      width: 38,
+      height: 38,
+    },
+    '@media (max-width: 390px)': {
+      width: 28,
+      height: 28,
+    },
+  }
+})

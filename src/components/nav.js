@@ -1,6 +1,7 @@
 import { View, Text,TouchableOpacity } from 'react-native'
 import StyleSheet from 'react-native-media-query';
 import { useNavigation, useRoute } from '@react-navigation/native'
+
 import HomeIcon from '../icons/home'
 import CalendarIcon from '../icons/calendar'
 import NotesIcon from '../icons/notes'

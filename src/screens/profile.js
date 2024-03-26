@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, ScrollView ,Text, Image,Alert } from 'react-native';
+import { View, ScrollView ,Text, Image } from 'react-native';
 import StyleSheet from 'react-native-media-query';
 import Constants from 'expo-constants';
 import Loading from '../components/loading';
@@ -158,11 +158,29 @@ const { styles } = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 20,
     marginTop: 20,
+    '@media (max-width: 820px)': {
+      borderRightWidth: 4,
+      borderLeftWidth: 4,
+      borderBottomWidth: 4,
+    },
+    '@media (max-width: 650px)': {
+      borderRightWidth: 2,
+      borderLeftWidth: 2,
+      borderBottomWidth: 2,
+    },
   },
   profileImage: {
-    width: 100,
-    height: 100,
     borderRadius: 50,
+    '@media (max-width: 820px)': {
+      width: 120,
+      height: 120,
+      borderRadius: 100,
+    },
+    '@media (max-width: 650px)': {
+      width: 100,
+      height: 100,
+      borderRadius: 50,
+    },
     '@media (max-width: 390px)': {
       width: 80,
       height: 80,
@@ -171,10 +189,15 @@ const { styles } = StyleSheet.create({
   profileName: {
     fontSize: 18,
     fontWeight: 'bold',
+    '@media (max-width: 820px)': {
+      fontSize: 26,
+    },
     '@media (max-width: 479px)': {
+      fontSize: 20,
       width: 250,
     },
     '@media (max-width: 390px)': {
+      fontSize: 18,
       width: 170,
     },
   },
@@ -182,6 +205,16 @@ const { styles } = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     marginTop: 5,
+    fontWeight: 'bold',
+    '@media (max-width: 820px)': {
+      fontSize: 20,
+    },
+    '@media (max-width: 479px)': {
+      fontSize: 16,
+    },
+    '@media (max-width: 390px)': {
+      fontSize: 14,
+    },
   },
   profileCareer: {
     fontSize: 14,

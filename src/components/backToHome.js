@@ -1,4 +1,5 @@
-import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
+import StyleSheet from 'react-native-media-query';
 import { useNavigation } from '@react-navigation/native';
 import BackIcon from '../icons/back';
 
@@ -13,7 +14,7 @@ export default function BackToHome({ children }) {
     );
 }
 
-const styles = StyleSheet.create({
+const {styles} = StyleSheet.create({
     backContent: {
         display: 'flex',
         flexDirection: 'row',
@@ -23,7 +24,12 @@ const styles = StyleSheet.create({
     },
     backText: {
         color: '#000',
-        fontSize: 20,
         fontWeight: 'bold',
+        '@media (max-width: 1024px)': {
+            fontSize: 26,
+          },
+        '@media (max-width: 390px)': {
+            fontSize: 20,
+          },
     },	
 });

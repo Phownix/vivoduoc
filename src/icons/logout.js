@@ -1,11 +1,11 @@
 import * as React from "react"
+import StyleSheet from 'react-native-media-query';
 import Svg, { Path } from "react-native-svg"
 
 const Logout = () => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
-    width={32}
-    height={32}
+    style={styles.main}
     fill="none"
     viewBox="0 0 24 24"
   >
@@ -18,3 +18,16 @@ const Logout = () => (
   </Svg>
 )
 export default Logout
+
+const {styles} = StyleSheet.create({
+  main: {
+    '@media (max-width: 1024px)': {
+      width: 48,
+      height: 48,
+    },
+    '@media (max-width: 390px)': {
+      width: 32,
+      height: 32,
+    },
+  }
+})
