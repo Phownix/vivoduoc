@@ -1,8 +1,10 @@
 # vivoduoc app
-<div align="center">
-<img src='https://i.postimg.cc/wBQRkQf0/V-deo-sin-t-tulo-Hecho-con-Clipchamp.gif' border='0' alt='V-deo-sin-t-tulo-Hecho-con-Clipchamp'/>
-<p>Clone of vivoduoc students app<p>
-</div>
+
+<p align="center">
+  <img src="https://i.postimg.cc/wBQRkQf0/V-deo-sin-t-tulo-Hecho-con-Clipchamp.gif"/> 
+<p/>
+
+<p align="center">This vivoduoc app is a clone created with React Native With Expo technologies.</p>
 
 ## Run the app in dev mode
 You will need to use the [Expo Go](https://expo.dev/client) app
