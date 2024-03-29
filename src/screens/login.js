@@ -326,10 +326,10 @@ const { styles }= StyleSheet.create({
       width: 260,
       height: 50,
     },
-    '@media (max-width: 390px)': {
+    '@media (max-width: 430px)': {
       width: 185,
       height: 43,
-    }
+    },
   },
   inputContainer: {
     position: 'relative',
@@ -357,11 +357,11 @@ const { styles }= StyleSheet.create({
       height: 45,
       fontSize: 20,
     },
-    '@media (max-width: 390px)': {
+    '@media (max-width: 430px)': {
       width: 300,
       height: 40,
       fontSize: 16,
-    }
+    },
   },
   inputSelected: {
     width: 300,
@@ -385,11 +385,11 @@ const { styles }= StyleSheet.create({
       height: 45,
       fontSize: 20,
     },
-    '@media (max-width: 390px)': {
+    '@media (max-width: 430px)': {
       width: 300,
       height: 40,
       fontSize: 16,
-    }
+    },
   },
   inputPass: {
     width: 300,
@@ -414,7 +414,7 @@ const { styles }= StyleSheet.create({
       height: 45,
       fontSize: 20,
     },
-    '@media (max-width: 390px)': {
+    '@media (max-width: 430px)': {
       width: 300,
       height: 40,
       fontSize: 16,
@@ -443,7 +443,7 @@ const { styles }= StyleSheet.create({
       height: 45,
       fontSize: 20,
     },
-    '@media (max-width: 390px)': {
+    '@media (max-width: 430px)': {
       width: 300,
       height: 40,
       fontSize: 16,
@@ -460,7 +460,7 @@ const { styles }= StyleSheet.create({
     '@media (max-width: 768px)': {
       fontSize: 20,
     },
-    '@media (max-width: 390px)': {
+    '@media (max-width: 430px)': {
       fontSize: 16,
     }
   },
@@ -475,7 +475,7 @@ const { styles }= StyleSheet.create({
     '@media (max-width: 768px)': {
       fontSize: 20,
     },
-    '@media (max-width: 390px)': {
+    '@media (max-width: 430px)': {
       fontSize: 16,
     }
   },  
@@ -492,7 +492,7 @@ const { styles }= StyleSheet.create({
       left: 10,
       top: 12,
     },
-    '@media (max-width: 390px)': {
+    '@media (max-width: 430px)': {
       left: 10,
       top: 10,
     }
@@ -529,7 +529,7 @@ const { styles }= StyleSheet.create({
       width: 400,
       height: 45,
     },
-    '@media (max-width: 390px)': {
+    '@media (max-width: 430px)': {
       width: 300,
       height: 40,
     }
@@ -555,7 +555,7 @@ const { styles }= StyleSheet.create({
       width: 400,
       height: 45,
     },
-    '@media (max-width: 390px)': {
+    '@media (max-width: 430px)': {
       width: 300,
       height: 40,
     }
@@ -570,7 +570,7 @@ const { styles }= StyleSheet.create({
     '@media (max-width: 768px)': {
       top: 8,
     },
-    '@media (max-width: 390px)': {
+    '@media (max-width: 430px)': {
       top: 5,
     }
   },
@@ -584,7 +584,7 @@ const { styles }= StyleSheet.create({
     '@media (max-width: 768px)': {
       fontSize: 20,
     },
-    '@media (max-width: 390px)': {
+    '@media (max-width: 430px)': {
       fontSize: 19,
     }
   },
@@ -617,7 +617,7 @@ const { styles }= StyleSheet.create({
     '@media (max-width: 768px)': {
       width: 400,
     },
-    '@media (max-width: 390px)': {
+    '@media (max-width: 430px)': {
       width: 300,
     }
   },
@@ -635,7 +635,7 @@ const { styles }= StyleSheet.create({
     '@media (max-width: 768px)': {
       fontSize: 20,
     },
-    '@media (max-width: 390px)': {
+    '@media (max-width: 430px)': {
       fontSize: 16,
     }
   }
