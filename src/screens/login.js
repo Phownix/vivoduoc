@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import {ActivityIndicator, View, Image, TouchableOpacity, TextInput, Text, ScrollView, StyleSheet} from 'react-native';
+import {ActivityIndicator, View, Image, TouchableOpacity, TextInput, Text, ScrollView} from 'react-native';
+import StyleSheet from 'react-native-media-query';
 import { ALERT_TYPE, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 import Animated, { useSharedValue, withSpring, useAnimatedStyle, interpolate, Extrapolate, withTiming } from 'react-native-reanimated';
 import Checkbox from 'expo-checkbox';
@@ -229,7 +230,7 @@ const Login = () => {
             <Animated.View style={[animatedStyle]}>
               <Image 
                 source={require('../../assets/logo_vivoduoc.png')}
-                style={{ width: 185, height: 43 }}
+                style={styles.logo}
               />
             </Animated.View>
           </View>
@@ -311,10 +312,24 @@ const Login = () => {
 
 export default Login;
 
-const styles = StyleSheet.create({
+const { styles }= StyleSheet.create({
   container: {
     height: vh(105),
     backgroundColor: 'black',
+  },
+  logo: {
+    '@media (max-width: 1024px)': {
+      width: 320,
+      height: 60,
+    },
+    '@media (max-width: 768px)': {
+      width: 260,
+      height: 50,
+    },
+    '@media (max-width: 390px)': {
+      width: 185,
+      height: 43,
+    }
   },
   inputContainer: {
     position: 'relative',
@@ -332,6 +347,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: 'white',
+    '@media (max-width: 1024px)': {
+      width: 450,
+      height: 50,
+      fontSize: 24,
+    },
+    '@media (max-width: 768px)': {
+      width: 400,
+      height: 45,
+      fontSize: 20,
+    },
+    '@media (max-width: 390px)': {
+      width: 300,
+      height: 40,
+      fontSize: 16,
+    }
   },
   inputSelected: {
     width: 300,
@@ -345,6 +375,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: 'white',
+    '@media (max-width: 1024px)': {
+      width: 450,
+      height: 50,
+      fontSize: 24,
+    },
+    '@media (max-width: 768px)': {
+      width: 400,
+      height: 45,
+      fontSize: 20,
+    },
+    '@media (max-width: 390px)': {
+      width: 300,
+      height: 40,
+      fontSize: 16,
+    }
   },
   inputPass: {
     width: 300,
@@ -359,6 +404,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: 'white',
+    '@media (max-width: 1024px)': {
+      width: 450,
+      height: 50,
+      fontSize: 24,
+    },
+    '@media (max-width: 768px)': {
+      width: 400,
+      height: 45,
+      fontSize: 20,
+    },
+    '@media (max-width: 390px)': {
+      width: 300,
+      height: 40,
+      fontSize: 16,
+    }
   },
   inputPassSelected: {
     width: 300,
@@ -373,24 +433,69 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: 'white',
+    '@media (max-width: 1024px)': {
+      width: 450,
+      height: 50,
+      fontSize: 24,
+    },
+    '@media (max-width: 768px)': {
+      width: 400,
+      height: 45,
+      fontSize: 20,
+    },
+    '@media (max-width: 390px)': {
+      width: 300,
+      height: 40,
+      fontSize: 16,
+    }
   },
   inputTextSelected: {
     color: 'rgb(252, 189, 27)',
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 5,
+    '@media (max-width: 1024px)': {
+      fontSize: 24,
+    },
+    '@media (max-width: 768px)': {
+      fontSize: 20,
+    },
+    '@media (max-width: 390px)': {
+      fontSize: 16,
+    }
   },
   inputText: {
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 5,
+    '@media (max-width: 1024px)': {
+      fontSize: 24,
+    },
+    '@media (max-width: 768px)': {
+      fontSize: 20,
+    },
+    '@media (max-width: 390px)': {
+      fontSize: 16,
+    }
   },  
   Icon: {
     position: 'absolute',
     left: 10,
     top: 10,
     opacity: .8,
+    '@media (max-width: 1024px)': {
+      left: 10,
+      top: 15,
+    },
+    '@media (max-width: 768px)': {
+      left: 10,
+      top: 12,
+    },
+    '@media (max-width: 390px)': {
+      left: 10,
+      top: 10,
+    }
   },
   IconView: {
     position: 'absolute',
@@ -415,7 +520,19 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 7,
     marginTop: 15,
-    opacity: .5
+    opacity: .5,
+    '@media (max-width: 1024px)': {
+      width: 450,
+      height: 55,
+    },
+    '@media (max-width: 768px)': {
+      width: 400,
+      height: 45,
+    },
+    '@media (max-width: 390px)': {
+      width: 300,
+      height: 40,
+    }
   },
   loginBtn: {
     display: 'flex',
@@ -430,16 +547,46 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     marginTop: 15,
     position: 'relative',
+    '@media (max-width: 1024px)': {
+      width: 450,
+      height: 55,
+    },
+    '@media (max-width: 768px)': {
+      width: 400,
+      height: 45,
+    },
+    '@media (max-width: 390px)': {
+      width: 300,
+      height: 40,
+    }
   },
   loginIcon: {
     position: 'absolute',
     left: 10,
     top: 5,
+    '@media (max-width: 1024px)': {
+      top: 15,
+    },
+    '@media (max-width: 768px)': {
+      top: 8,
+    },
+    '@media (max-width: 390px)': {
+      top: 5,
+    }
   },
   loginText: {
     color: 'white',
     fontSize: 19,
     fontWeight: 'bold',
+    '@media (max-width: 1024px)': {
+      fontSize: 24,
+    },
+    '@media (max-width: 768px)': {
+      fontSize: 20,
+    },
+    '@media (max-width: 390px)': {
+      fontSize: 19,
+    }
   },
   logoVivoDuoc: {
     display: 'flex',
@@ -447,13 +594,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 45
-  },
-  logoDuoc: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 20,
   },
   bg: {
     position: 'absolute',
@@ -471,6 +611,15 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     gap: 10,
+    '@media (max-width: 1024px)': {
+      width: 450,
+    },
+    '@media (max-width: 768px)': {
+      width: 400,
+    },
+    '@media (max-width: 390px)': {
+      width: 300,
+    }
   },
   saveSessionCheckbox: {
     borderRadius: 50,
@@ -480,5 +629,14 @@ const styles = StyleSheet.create({
     color: '#eee',
     fontSize: 16,
     fontWeight: 'bold',
+    '@media (max-width: 1024px)': {
+      fontSize: 24,
+    },
+    '@media (max-width: 768px)': {
+      fontSize: 20,
+    },
+    '@media (max-width: 390px)': {
+      fontSize: 16,
+    }
   }
 });
