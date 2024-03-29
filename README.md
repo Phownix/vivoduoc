@@ -1,6 +1,7 @@
 # vivoduoc app
 <div align="center">
-<a href="https://ibb.co/MV90LYd"><img src="https://i.ibb.co/PhtH87k/home.png" alt="home" border="0"></a>
+<img src='https://i.postimg.cc/wBQRkQf0/V-deo-sin-t-tulo-Hecho-con-Clipchamp.gif' border='0' alt='V-deo-sin-t-tulo-Hecho-con-Clipchamp'/>
+<p>Clone of vivoduoc students app<p>
 </div>
 
 ## Run the app in dev mode
@@ -24,11 +25,11 @@ $ yarn start || yarn android || yarn ios
 
 <div align="center">
 <a href="https://reactnative.dev/">
-<img width="100" src='https://i.postimg.cc/rwmM0F1z/react.png' border='0' alt='react'/>
+	<img width="100" src='https://i.postimg.cc/rwmM0F1z/react.png' border='0' alt='react'/>
 </a>
 <a href="https://expo.dev/">
-<img width="100" src='https://i.postimg.cc/KKYCC5hd/expo.png' border='0' alt='expo'/>
+	<img width="100" src='https://i.postimg.cc/KKYCC5hd/expo.png' border='0' alt='expo'/>
 </a>
 </div>
 
-> Developed by [evairx](https://github.com/evairx).
+> Developed by [evairx](https://github.com/evairx)
