@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Text } from 'react-native';
+import { View, ScrollView,RefreshControl, Text } from 'react-native';
 import StyleSheet from 'react-native-media-query';
 import Constants from 'expo-constants';
 import Loading from '../components/loading';
@@ -20,7 +20,22 @@ const Calendar = () => {
   const [loading, setLoading] = useState(true);
   const [selectedDay, setSelectedDay] = useState('Semana');
   const [error, setError] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation();
+  
+  const onRefresh = () => {
+    setRefreshing(true);
+    console.log('Refreshing...');
+    setHorario([]);
+    fetchData();
+  };
+
+  const handleScroll = (event) => {
+    const { contentOffset } = event.nativeEvent;
+    if (contentOffset.y <= -100) {
+      onRefresh();
+    }
+  };
 
   useEffect(() => {
     fetchData();
@@ -50,6 +65,7 @@ const Calendar = () => {
           const filePath = directory + fileName;
           await FileSystem.makeDirectoryAsync(directory, { intermediates: true });
           await FileSystem.writeAsStringAsync(filePath, JSON.stringify(jsonData));
+          setRefreshing(false);
         } else {
           console.error('Error al obtener los datos del alumno:', response.status);
           await AsyncStorage.setItem('expired', 'true');
@@ -70,6 +86,7 @@ const Calendar = () => {
       navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   };
 
@@ -119,7 +136,18 @@ const Calendar = () => {
           </ScrollView>
         ) : (
           horario && horario.nomCarrera && (
-            <ScrollView style={selectedDay === 'Semana' ? styles.mainWeek : styles.main}>
+            <ScrollView 
+              onScroll={handleScroll} 
+              style={selectedDay === 'Semana' ? styles.mainWeek : styles.main} 
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                  colors={['#012C56']}
+                  progressBackgroundColor="rgb(252, 189, 27)"
+                />
+              }
+            >
               {selectedDay === 'Semana' ? (
                 <Calendary horario={horario} />
               ) : (

@@ -117,7 +117,7 @@ export default function Profile() {
                   <Text style={styles.credential}>Credencial Virtual</Text>
                   <Barcode
                     value={`${data.rut}`}
-                    options={{ format: 'CODE128', displayValue: 'false'  }}
+                    options={{ format: 'CODE128',  displayValue: 'false'}}
                   />
                 </View>
               </ScrollView>
