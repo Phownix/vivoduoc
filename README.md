@@ -1,7 +1,7 @@
 # vivoduoc app
 
 <p align="center">
-  <img src="https://i.postimg.cc/wBQRkQf0/V-deo-sin-t-tulo-Hecho-con-Clipchamp.gif"/> 
+  <img src="https://github.com/evairx/vivoduoc/blob/main/assets/intro.gif?raw=true"/> 
 <p/>
 
 <p align="center">This vivoduoc app is a clone created with React Native With Expo technologies.</p>
