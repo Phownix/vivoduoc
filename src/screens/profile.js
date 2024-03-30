@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { View, ScrollView ,Text, Image } from 'react-native';
+import { View, ScrollView ,Text,RefreshControl, Image } from 'react-native';
+import * as FileSystem from 'expo-file-system';
 import StyleSheet from 'react-native-media-query';
 import Constants from 'expo-constants';
 import Loading from '../components/loading';
@@ -11,54 +12,105 @@ import VerifyToken from '../middleware/verifyToken';
 import BackToHome from '../components/backToHome';
 import Logout from '../components/logout'
 import Nav from '../components/nav';
+import { vh } from 'react-native-expo-viewport-units';
 
 export default function Profile() {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-
+  const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation();
 
   VerifyToken('Login');
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = await AsyncStorage.getItem('access_token');
-        const id = await AsyncStorage.getItem('idAlumno');
+  const onRefresh = () => {
+    setRefreshing(true);
+    setLoading(true);
+    setData({});
 
-        if (token && id) {
-          const urlProfile = process.env.EXPO_PUBLIC_PROFILE_ENDPOINT;
-          const response = await fetch(`${urlProfile}=${id}`, {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          });
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+    fetchData();
+  };
 
-          if (response.ok) {
-            const jsonData = await response.json();
-            setData(jsonData);
-            console.log('Datos del alumno:', jsonData);
-          } else {
-            console.error('Error al obtener los datos del alumno:', response.status);
-            await AsyncStorage.setItem('expired', 'true');
-            await AsyncStorage.multiRemove(['access_token', 'idAlumno', 'codAlumno', 'rut']);
-            navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
-            setError(true);
+  const handleScroll = (event) => {
+    const { contentOffset } = event.nativeEvent;
+    if (contentOffset.y <= -100) {
+      onRefresh();
+    }
+  };
+
+
+  const fetchData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('access_token');
+      const id = await AsyncStorage.getItem('idAlumno');
+
+      if (token && id) {
+        const urlProfile = process.env.EXPO_PUBLIC_PROFILE_ENDPOINT;
+        const response = await fetch(`${urlProfile}=${id}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`
           }
+        });
+
+        if (response.ok) {
+          const jsonData = await response.json();
+          setData(jsonData);
+          const directory = FileSystem.documentDirectory + 'data/';
+          const fileName = 'profile.json';
+          const filePath = directory + fileName;
+          await FileSystem.makeDirectoryAsync(directory, { intermediates: true });
+          await FileSystem.writeAsStringAsync(filePath, JSON.stringify(jsonData));
+          console.log('profile guardado en:', filePath);
+        } else {
+          console.error('Error al obtener los datos del alumno:', response.status);
+          await AsyncStorage.setItem('expired', 'true');
+          await AsyncStorage.multiRemove(['access_token', 'idAlumno', 'codAlumno', 'rut']);
+          navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
+          setError(true);
+        }
+      }
+    } catch (error) {
+      console.error('Error al realizar la solicitud:', error);
+      await AsyncStorage.multiRemove(['access_token', 'idAlumno', 'codAlumno', 'rut']);
+      navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const initData = async () => {
+      const directory = FileSystem.documentDirectory + 'data/';
+      const fileName = 'profile.json';
+      const filePath = directory + fileName;
+      try {
+        const directoryInfo = await FileSystem.getInfoAsync(directory);
+        if (!directoryInfo.exists) {
+          await FileSystem.makeDirectoryAsync(directory, { intermediates: true });
+        }
+  
+        const fileInfo = await FileSystem.getInfoAsync(filePath);
+        if (fileInfo.exists) {
+          const fileContent = await FileSystem.readAsStringAsync(filePath);
+          const profileJson = JSON.parse(fileContent);
+          console.log('Datos cargados desde el archivo JSON.');
+          setData(profileJson);
+          setLoading(false);
+        } else {
+          console.log('El archivo JSON no existe en el directorio.');
+          fetchData();
         }
       } catch (error) {
-        console.error('Error al realizar la solicitud:', error);
-        await AsyncStorage.multiRemove(['access_token', 'idAlumno', 'codAlumno', 'rut']);
-        navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
+        console.error('Error al inicializar los datos:', error);
         setError(true);
-      } finally {
-        setLoading(false);
       }
     };
-
-    fetchData();
+    initData();
   }, []);
 
   function formatearRUT(rut) {
@@ -88,12 +140,32 @@ export default function Profile() {
         </ScrollView>
       ) : (
         loading ? (
-          <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <ScrollView 
+            contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                colors={['#012C56']}
+                progressBackgroundColor="rgb(252, 189, 27)"
+              />
+            }
+          >
               <Loading/>
           </ScrollView>
         ) : (
           data && data.nombreCompleto && (
-            <>
+            <ScrollView
+              onScroll={handleScroll} 
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                  colors={['#012C56']}
+                  progressBackgroundColor="rgb(252, 189, 27)"
+                />
+              }
+            >
               <View style={styles.main}>
                 <View style={styles.profileContent}>
                   <Image
@@ -106,7 +178,7 @@ export default function Profile() {
                   </View>
                 </View>
               </View>
-              <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 90 }}>
+              <View style={{flex: 1, justifyContent: 'center',  alignContent: 'center', height: vh(50)}}>
                 <View style={styles.contentCode}>
                   <Text style={styles.credential}>Credencial Virtual</Text>
                   <Barcode
@@ -114,8 +186,8 @@ export default function Profile() {
                     options={{ format: 'CODE128',  displayValue: 'false'}}
                   />
                 </View>
-              </ScrollView>
-            </>
+              </View>
+            </ScrollView>
           )
         )
       )}
@@ -175,7 +247,7 @@ const { styles } = StyleSheet.create({
       height: 100,
       borderRadius: 50,
     },
-    '@media (max-width: 390px)': {
+    '@media (max-width: 412px)': {
       width: 80,
       height: 80,
     },
@@ -190,7 +262,7 @@ const { styles } = StyleSheet.create({
       fontSize: 20,
       width: 250,
     },
-    '@media (max-width: 390px)': {
+    '@media (max-width: 412px)': {
       fontSize: 18,
       width: 170,
     },
@@ -206,7 +278,7 @@ const { styles } = StyleSheet.create({
     '@media (max-width: 479px)': {
       fontSize: 16,
     },
-    '@media (max-width: 390px)': {
+    '@media (max-width: 412px)': {
       fontSize: 14,
     },
   },

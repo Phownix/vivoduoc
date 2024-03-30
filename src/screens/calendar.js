@@ -62,11 +62,11 @@ const Calendar = () => {
           const jsonData = await response.json();
           setHorario(jsonData[0]);
           const directory = FileSystem.documentDirectory + 'data/';
-          console.log(directory);
           const fileName = 'horario.json';
           const filePath = directory + fileName;
           await FileSystem.makeDirectoryAsync(directory, { intermediates: true });
           await FileSystem.writeAsStringAsync(filePath, JSON.stringify(jsonData));
+          console.log('horario guardado en:', filePath);
         } else {
           console.error('Error al obtener los datos del alumno:', response.status);
           await AsyncStorage.setItem('expired', 'true');

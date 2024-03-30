@@ -57,7 +57,7 @@ const { styles } = StyleSheet.create({
       borderRadius: 50,
       width:150,
     },
-    '@media (max-width: 390px)': {
+    '@media (max-width: 412px)': {
       height: 40,
       borderWidth: 2,
       borderRadius: 20,
@@ -69,7 +69,7 @@ const { styles } = StyleSheet.create({
       fontSize: 26,
       fontWeight: '700',
     },
-    '@media (max-width: 390px)': {
+    '@media (max-width: 412px)': {
       fontSize: 16,
       fontWeight: '700',
     },

@@ -25,7 +25,7 @@ const {styles} = StyleSheet.create({
       width: 38,
       height: 38,
     },
-    '@media (max-width: 390px)': {
+    '@media (max-width: 412px)': {
       width: 28,
       height: 28,
     },
