@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView,RefreshControl, Text } from 'react-native';
+import { View, ScrollView, RefreshControl, Text } from 'react-native';
 import StyleSheet from 'react-native-media-query';
 import Constants from 'expo-constants';
 import Loading from '../components/loading';
@@ -25,8 +25,12 @@ const Calendar = () => {
   
   const onRefresh = () => {
     setRefreshing(true);
-    console.log('Refreshing...');
+    setLoading(true);
     setHorario([]);
+
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
     fetchData();
   };
 
@@ -37,58 +41,78 @@ const Calendar = () => {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const fetchData = async () => {
     try {
       const token = await AsyncStorage.getItem('access_token');
       const id = await AsyncStorage.getItem('idAlumno');
-
+  
+      console.log('consiguiendo datos del alumno en la API...');
+  
       if (token && id) {
         const urlCalendary = process.env.EXPO_PUBLIC_CALENDAR_ENDPOINT;
-
+  
         const response = await fetch(`${urlCalendary}=${id}`, {
           method: 'GET',
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         });
-
+  
         if (response.ok) {
           const jsonData = await response.json();
           setHorario(jsonData[0]);
           const directory = FileSystem.documentDirectory + 'data/';
-          console.log(directory)
+          console.log(directory);
           const fileName = 'horario.json';
           const filePath = directory + fileName;
           await FileSystem.makeDirectoryAsync(directory, { intermediates: true });
           await FileSystem.writeAsStringAsync(filePath, JSON.stringify(jsonData));
-          setRefreshing(false);
         } else {
           console.error('Error al obtener los datos del alumno:', response.status);
           await AsyncStorage.setItem('expired', 'true');
-          await AsyncStorage.removeItem('access_token');
-          await AsyncStorage.removeItem('idAlumno');
-          await AsyncStorage.removeItem('codAlumno');
-          await AsyncStorage.removeItem('rut');
+          await AsyncStorage.multiRemove(['access_token', 'idAlumno', 'codAlumno', 'rut']);
           navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
         }
       }
     } catch (error) {
       console.error('Error al realizar la solicitud:', error);
-      setError(true)
-      await AsyncStorage.removeItem('access_token');
-      await AsyncStorage.removeItem('idAlumno');
-      await AsyncStorage.removeItem('codAlumno');
-      await AsyncStorage.removeItem('rut');
+      setError(true);
+      await AsyncStorage.multiRemove(['access_token', 'idAlumno', 'codAlumno', 'rut']);
       navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
     } finally {
       setLoading(false);
-      setRefreshing(false);
     }
   };
+
+  useEffect(() => {
+    const initData = async () => {
+      const directory = FileSystem.documentDirectory + 'data/';
+      const fileName = 'horario.json';
+      const filePath = directory + fileName;
+      try {
+        const directoryInfo = await FileSystem.getInfoAsync(directory);
+        if (!directoryInfo.exists) {
+          await FileSystem.makeDirectoryAsync(directory, { intermediates: true });
+        }
+  
+        const fileInfo = await FileSystem.getInfoAsync(filePath);
+        if (fileInfo.exists) {
+          const fileContent = await FileSystem.readAsStringAsync(filePath);
+          const horarioJson = JSON.parse(fileContent);
+          console.log('Datos cargados desde el archivo JSON.');
+          setHorario(horarioJson[0]);
+          setLoading(false);
+        } else {
+          console.log('El archivo JSON no existe en el directorio.');
+          fetchData();
+        }
+      } catch (error) {
+        console.error('Error al inicializar los datos:', error);
+        setError(true);
+      }
+    };
+    initData();
+  }, []);
 
   useEffect(() => {
     const today = new Date();
@@ -131,7 +155,16 @@ const Calendar = () => {
         </ScrollView>
       ) : (
         loading ? (
-          <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                colors={['#012C56']}
+                progressBackgroundColor="rgb(252, 189, 27)"
+              />
+            }
+          >
             <Loading/>
           </ScrollView>
         ) : (

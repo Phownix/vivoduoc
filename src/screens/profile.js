@@ -43,20 +43,14 @@ export default function Profile() {
           } else {
             console.error('Error al obtener los datos del alumno:', response.status);
             await AsyncStorage.setItem('expired', 'true');
-            await AsyncStorage.removeItem('access_token');
-            await AsyncStorage.removeItem('idAlumno');
-            await AsyncStorage.removeItem('codAlumno');
-            await AsyncStorage.removeItem('rut');
+            await AsyncStorage.multiRemove(['access_token', 'idAlumno', 'codAlumno', 'rut']);
             navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
             setError(true);
           }
         }
       } catch (error) {
         console.error('Error al realizar la solicitud:', error);
-        await AsyncStorage.removeItem('access_token');
-        await AsyncStorage.removeItem('idAlumno');
-        await AsyncStorage.removeItem('codAlumno');
-        await AsyncStorage.removeItem('rut');
+        await AsyncStorage.multiRemove(['access_token', 'idAlumno', 'codAlumno', 'rut']);
         navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
         setError(true);
       } finally {
