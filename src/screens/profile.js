@@ -127,6 +127,16 @@ export default function Profile() {
     rutFormateado = formatearRUT(data.rut);
   }
 
+  let shortName;
+
+  if (data && data.nombreCompleto) {
+    const fullName = data?.nombreCompleto;
+    const nameParts = fullName.split(' ');
+    const firstName = nameParts[0];
+    const lastName = nameParts.length > 1 ? nameParts[2] : '';
+    shortName = `${firstName} ${lastName}`;
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar style="dark"/>
@@ -168,17 +178,15 @@ export default function Profile() {
             >
               <View style={styles.main}>
                 <View style={styles.profileContent}>
+                  <View>
+                    <Text style={styles.profileName}>{shortName}</Text>
+                  </View>
                   <Image
                     style={styles.profileImage}
                     source={require('../../assets/profile.png')}
                   />
-                  <View>
-                    <Text style={styles.profileName}>{data?.nombreCompleto}</Text>
-                    <Text style={styles.profileRut}>{rutFormateado}</Text>
-                  </View>
                 </View>
               </View>
-              <View style={{flex: 1, justifyContent: 'center',  alignContent: 'center', height: vh(50)}}>
                 <View style={styles.contentCode}>
                   <Text style={styles.credential}>Credencial Virtual</Text>
                   <Barcode
@@ -186,7 +194,6 @@ export default function Profile() {
                     options={{ format: 'CODE128',  displayValue: 'false'}}
                   />
                 </View>
-              </View>
             </ScrollView>
           )
         )
@@ -216,30 +223,20 @@ const { styles } = StyleSheet.create({
     flexDirection: 'row',
     gap: 15,
     alignItems: 'center',
-    justifyContent: 'center',
-    borderColor: '#012C56',
-    borderRightWidth: 2,
-    borderLeftWidth: 2,
-    borderBottomWidth: 2,
-    borderRadius: 10,
-    paddingVertical: 20,
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
     marginTop: 20,
-    '@media (max-width: 820px)': {
-      borderRightWidth: 4,
-      borderLeftWidth: 4,
-      borderBottomWidth: 4,
-    },
-    '@media (max-width: 650px)': {
-      borderRightWidth: 2,
-      borderLeftWidth: 2,
-      borderBottomWidth: 2,
-    },
   },
   profileImage: {
-    borderRadius: 50,
+    borderRadius: 100,
+    '@media (max-width: 1024px)': {
+      width: 150,
+      height: 150,
+      borderRadius: 100,
+    },
     '@media (max-width: 820px)': {
-      width: 120,
-      height: 120,
+      width: 100,
+      height: 100,
       borderRadius: 100,
     },
     '@media (max-width: 650px)': {
@@ -253,17 +250,20 @@ const { styles } = StyleSheet.create({
     },
   },
   profileName: {
-    fontSize: 18,
+    fontSize: 32,
     fontWeight: 'bold',
+    '@media (max-width: 1024px)': {
+      fontSize: 32,
+    },
     '@media (max-width: 820px)': {
       fontSize: 26,
     },
     '@media (max-width: 479px)': {
-      fontSize: 20,
+      fontSize: 24,
       width: 250,
     },
     '@media (max-width: 412px)': {
-      fontSize: 18,
+      fontSize: 22,
       width: 170,
     },
   },
@@ -287,9 +287,22 @@ const { styles } = StyleSheet.create({
     marginTop: 5,
   },
   contentCode: {
-    display: 'flex',
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    height: vh(65),
+    '@media (max-height: 1366px)': {
+      height: vh(65),
+    },
+    '@media (max-height: 1024px)': {
+      height: vh(58),
+    },
+    '@media (max-height: 740px)': {
+      height: vh(52),
+    },
+    '@media (max-height: 667px)': {
+      height: vh(45),
+    },
   },
   credential: {
     fontSize: 18,

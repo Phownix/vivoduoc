@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { View,Text, ScrollView, Image,Linking,Button, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import StyleSheet from 'react-native-media-query';
 import { StatusBar } from 'expo-status-bar';
 
@@ -13,6 +14,7 @@ import Spotify from '../icons/spotify';
 const podcastURL = 'https://open.spotify.com/show/2qhwWynrwdxnAeFCZZndGx';
 
 export default function Home() {
+  const navigation = useNavigation();
 
   const handlePress = useCallback(async () => {
     const supported = await Linking.canOpenURL(podcastURL);
