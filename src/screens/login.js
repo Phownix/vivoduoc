@@ -175,7 +175,6 @@ const Login = () => {
       }
 
       const responseData = await response.json();
-      console.log(responseData);
 
       // Verificar la información del perfil
       const profileResponse = await fetchProfile(responseData.access_token);
@@ -186,7 +185,6 @@ const Login = () => {
       }
 
       const profileData = await profileResponse.json();
-      console.log(profileData)
       if (!profileData || !profileData.idAlumno || !profileData.codAlumno || !profileData.rut) {
         console.log('El perfil no contiene los datos necesarios');
         setLoading(false); 
@@ -198,6 +196,7 @@ const Login = () => {
       await AsyncStorage.setItem('codAlumno', profileData.codAlumno);
       await AsyncStorage.setItem('rut', profileData.rut);
 
+      console.log('Sesion Iniciada con exito!')
             
       if (isSaveSession){
         await AsyncStorage.setItem('isSaveSession', 'true');
