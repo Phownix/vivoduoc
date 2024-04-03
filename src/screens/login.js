@@ -161,7 +161,6 @@ const Login = () => {
         if (response.status === 401) {
           const errorResponse = await response.json();
           if (errorResponse.error === 'invalid_grant' && errorResponse.error_description === 'Invalid user credentials') {
-            // Mostrar alerta de credenciales incorrectas
             Toast.show({
               type: ALERT_TYPE.WARNING,
               title: 'Datos Incorrectos',

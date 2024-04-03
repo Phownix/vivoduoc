@@ -120,7 +120,7 @@ export class ToastRender extends React.Component<IProps, IState> {
     //   return model({ isDark, type, title, description });
     // }
     return (
-      <View style={styles.cardContainer}>
+      <View style={[styles[`${type}cardContainer`]]}>
         {type && (
           <React.Fragment>
             <View style={styles.backendImage} />
@@ -152,15 +152,54 @@ export class ToastRender extends React.Component<IProps, IState> {
   }
 }
 
-const __styles = (isDark: boolean) =>
-  StyleSheet.create({
+const __styles = (isDark: boolean) => {
+  return StyleSheet.create({
     container: {
       position: 'absolute',
       left: 0,
       right: 0,
     },
-
-    cardContainer: {
+    [`${ALERT_TYPE.SUCCESS}cardContainer`]: {
+      flexDirection: 'row',
+      paddingHorizontal: 12,
+      paddingTop: 12,
+      paddingBottom: 12,
+      backgroundColor: '#012C56',
+      borderWidth: 2,
+      borderColor: '#00ff1a',
+      ...Platform.select({
+        ios: {
+          borderRadius: 12,
+          marginHorizontal: 12,
+        },
+        android: {
+          marginTop: 6,
+          borderRadius: 12,
+          marginHorizontal: 12,
+        },
+      }),
+    },
+    [`${ALERT_TYPE.DANGER}cardContainer`]: {
+      flexDirection: 'row',
+      paddingHorizontal: 12,
+      paddingTop: 12,
+      paddingBottom: 12,
+      backgroundColor: '#012C56',
+      borderWidth: 2,
+      borderColor: '#ff0000',
+      ...Platform.select({
+        ios: {
+          borderRadius: 12,
+          marginHorizontal: 12,
+        },
+        android: {
+          marginTop: 6,
+          borderRadius: 12,
+          marginHorizontal: 12,
+        },
+      }),
+    },
+    [`${ALERT_TYPE.WARNING}cardContainer`]: {
       flexDirection: 'row',
       paddingHorizontal: 12,
       paddingTop: 12,
@@ -180,7 +219,6 @@ const __styles = (isDark: boolean) =>
         },
       }),
     },
-
     labelContainer: {
       overflow: 'hidden',
       flex: 1,
@@ -224,3 +262,4 @@ const __styles = (isDark: boolean) =>
       tintColor: Color.get('info', isDark),
     },
   });
+};
