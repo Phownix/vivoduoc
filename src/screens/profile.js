@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { View, ScrollView ,Text,RefreshControl, Image,TouchableOpacity } from 'react-native';
+import { ALERT_TYPE, AlertNotificationRoot, Toast } from '../components/notifications';
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as FileSystem from 'expo-file-system';
 import StyleSheet from 'react-native-media-query';
@@ -142,52 +143,66 @@ export default function Profile() {
   const authenticateUser = async () => {
     try {
       const isBiometricAvailable = await LocalAuthentication.isEnrolledAsync();
+      const hasPasscode = await LocalAuthentication.hasHardwareAsync();
+
+      if (!isBiometricAvailable && !hasPasscode) {
+        setAuthenticated(true);
+        Toast.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: 'Acceso Permitido',
+          textBody: 'Ahora puedes ver tu credencial virtual.',
+        })
+        return;
+      }
+
       const promptMessage = isBiometricAvailable
         ? 'Desbloquea para ver el contenido'
         : 'Por favor, ingresa tu contraseña, patrón o PIN';
 
-      const { success } = await LocalAuthentication.authenticateAsync({
-        promptMessage,
-        fallbackLabel: 'Usar contraseña',
-      });
+      const { success, error } = await LocalAuthentication.authenticateAsync({
+          promptMessage,
+          fallbackLabel: 'Usar contraseña',
+        });
 
       if (success) {
         setAuthenticated(true);
+        Toast.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: 'Acceso Permitido',
+          textBody: 'Ahora puedes ver tu credencial virtual.',
+        })
+      } else if (error === 'user_cancel') {
+        Toast.show({
+          type: ALERT_TYPE.DANGER,
+          title: 'Acceso Denegado',
+          textBody: 'Cancelaste la autenticación. Por favor, inténtalo de nuevo.',
+        })
+      } else {
+        console.log('Autenticación cancelada o error:', error);
       }
+
+
     } catch (error) {
       console.error('Error al autenticar:', error);
     }
   };
+
   return (
     <View style={styles.container}>
       <StatusBar style="dark"/>
-      <View style={styles.header}>
-        <BackToHome>Perfil Duoc</BackToHome>
-        <Logout/>
-      </View>
-      {error ? (
-        <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={styles.errorText}>No se ha podido conectar con el servidor de DuocUc. Por favor, inténtelo de nuevo más tarde.</Text>
-        </ScrollView>
-      ) : (
-        loading ? (
-          <ScrollView 
-            contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-                colors={['#012C56']}
-                progressBackgroundColor="rgb(252, 189, 27)"
-              />
-            }
-          >
-              <Loading/>
+      <AlertNotificationRoot theme="light">
+        <View style={styles.header}>
+          <BackToHome>Perfil Duoc</BackToHome>
+          <Logout/>
+        </View>
+        {error ? (
+          <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={styles.errorText}>No se ha podido conectar con el servidor de DuocUc. Por favor, inténtelo de nuevo más tarde.</Text>
           </ScrollView>
         ) : (
-          data && data.nombreCompleto && (
-            <ScrollView
-              onScroll={handleScroll} 
+          loading ? (
+            <ScrollView 
+              contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}
               refreshControl={
                 <RefreshControl
                   refreshing={refreshing}
@@ -197,51 +212,72 @@ export default function Profile() {
                 />
               }
             >
-              <View style={styles.main}>
-                <View style={styles.profileContent}>
-                  <View>
-                    <Text style={styles.profileName}>{shortName}</Text>
-                    <Text>{rutFormateado}</Text>
-                  </View>
-                  {data && data?.avatar ? 
-                    <Image
-                      style={styles.profileImage}
-                      source={{
-                        uri: data.avatar,
-                      }}
-                    />
-                    :
-                    <Image
-                      style={styles.profileImage}
-                      source={require('../../assets/profile.png')}
-                    />
-                  }
-                </View>
-              <View style={styles.degreeContent}>
-                <Text style={styles.degree}>{data.carreras[0].nomCarrera}</Text>
-              </View>
-              </View>
-              {authenticated ? 
-                <View style={styles.contentCode}>
-                  <Text style={styles.credential}>Credencial Virtual</Text>
-                  <Barcode
-                    value={`${data.rut}`}
-                    options={{ format: 'CODE128',  displayValue: 'false'}}
-                  />
-                </View>
-              :
-                <View style={styles.contentCode}>
-                  <Text style={styles.credential}>Credencial Virtual</Text>
-                  <TouchableOpacity onPress={authenticateUser}>
-                    <Text>Click</Text>
-                  </TouchableOpacity>
-                </View>
-              }
+                <Loading/>
             </ScrollView>
+          ) : (
+            data && data.nombreCompleto && (
+              <ScrollView
+                onScroll={handleScroll} 
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                    colors={['#012C56']}
+                    progressBackgroundColor="rgb(252, 189, 27)"
+                  />
+                }
+              >
+                <View style={styles.main}>
+                  <View style={styles.profileContent}>
+                    <View>
+                      <Text style={styles.profileName}>{shortName}</Text>
+                      <Text>{rutFormateado}</Text>
+                    </View>
+                    {data && data?.avatar ? 
+                      <Image
+                        style={styles.profileImage}
+                        source={{
+                          uri: data.avatar,
+                        }}
+                      />
+                      :
+                      <Image
+                        style={styles.profileImage}
+                        source={require('../../assets/profile.png')}
+                      />
+                    }
+                  </View>
+                <View style={styles.degreeContent}>
+                  <Text style={styles.degree}>{data.carreras[0].nomCarrera}</Text>
+                </View>
+                </View>
+                {authenticated ? 
+                  <View style={styles.contentCode}>
+                    <Text style={styles.credential}>Credencial Virtual</Text>
+                    <Barcode
+                      value={`${data.rut}`}
+                      options={{ format: 'CODE128',  displayValue: 'false'}}
+                    />
+                  </View>
+                :
+                  <View style={styles.contentCode}>
+                    <Text style={styles.credential}>Credencial Virtual</Text>
+                    <TouchableOpacity onPress={authenticateUser}>
+                      <Text>Clicke</Text>
+                    </TouchableOpacity>
+                    <Image
+                        style={styles.barImageBlur}
+                        blurRadius={5}
+                        source={require('../../assets/bar.png')}
+                    />
+                  </View>
+                }
+              </ScrollView>
+            )
           )
-        )
-      )}
-      <Nav/>
+        )}
+        <Nav/>
+      </AlertNotificationRoot>
     </View>
   );
 }
@@ -350,6 +386,7 @@ const { styles } = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+
     height: vh(65),
     '@media (max-height: 1366px)': {
       height: vh(65),
@@ -373,5 +410,14 @@ const { styles } = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     paddingHorizontal: 10,
+  },
+  barImageBlur: {
+    backgroundColor: '#00000071',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
+  cardContainer: {
+    backgroundColor: '#012C56 !important'
   }
 })

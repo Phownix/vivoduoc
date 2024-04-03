@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import {ActivityIndicator, View, Image, TouchableOpacity, TextInput, Text, ScrollView} from 'react-native';
 import StyleSheet from 'react-native-media-query';
-import { ALERT_TYPE, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
+import { ALERT_TYPE, AlertNotificationRoot, Toast } from '../components/notifications';
 import Animated, { useSharedValue, withSpring, useAnimatedStyle, interpolate, Extrapolate, withTiming } from 'react-native-reanimated';
 import Checkbox from 'expo-checkbox';
 import { StatusBar } from 'expo-status-bar';
