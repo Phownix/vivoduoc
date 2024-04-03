@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { View, ScrollView ,Text,RefreshControl, Image } from 'react-native';
+import { View, ScrollView ,Text,RefreshControl, Image,TouchableOpacity } from 'react-native';
+import * as LocalAuthentication from 'expo-local-authentication';
 import * as FileSystem from 'expo-file-system';
 import StyleSheet from 'react-native-media-query';
 import Constants from 'expo-constants';
@@ -19,6 +20,7 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
   const navigation = useNavigation();
 
   VerifyToken('Login');
@@ -137,6 +139,25 @@ export default function Profile() {
     shortName = `${firstName} ${lastName}`;
   }
 
+  const authenticateUser = async () => {
+    try {
+      const isBiometricAvailable = await LocalAuthentication.isEnrolledAsync();
+      const promptMessage = isBiometricAvailable
+        ? 'Desbloquea para ver el contenido'
+        : 'Por favor, ingresa tu contraseña, patrón o PIN';
+
+      const { success } = await LocalAuthentication.authenticateAsync({
+        promptMessage,
+        fallbackLabel: 'Usar contraseña',
+      });
+
+      if (success) {
+        setAuthenticated(true);
+      }
+    } catch (error) {
+      console.error('Error al autenticar:', error);
+    }
+  };
   return (
     <View style={styles.container}>
       <StatusBar style="dark"/>
@@ -180,13 +201,27 @@ export default function Profile() {
                 <View style={styles.profileContent}>
                   <View>
                     <Text style={styles.profileName}>{shortName}</Text>
+                    <Text>{rutFormateado}</Text>
                   </View>
-                  <Image
-                    style={styles.profileImage}
-                    source={require('../../assets/profile.png')}
-                  />
+                  {data && data?.avatar ? 
+                    <Image
+                      style={styles.profileImage}
+                      source={{
+                        uri: data.avatar,
+                      }}
+                    />
+                    :
+                    <Image
+                      style={styles.profileImage}
+                      source={require('../../assets/profile.png')}
+                    />
+                  }
                 </View>
+              <View style={styles.degreeContent}>
+                <Text style={styles.degree}>{data.carreras[0].nomCarrera}</Text>
               </View>
+              </View>
+              {authenticated ? 
                 <View style={styles.contentCode}>
                   <Text style={styles.credential}>Credencial Virtual</Text>
                   <Barcode
@@ -194,6 +229,14 @@ export default function Profile() {
                     options={{ format: 'CODE128',  displayValue: 'false'}}
                   />
                 </View>
+              :
+                <View style={styles.contentCode}>
+                  <Text style={styles.credential}>Credencial Virtual</Text>
+                  <TouchableOpacity onPress={authenticateUser}>
+                    <Text>Click</Text>
+                  </TouchableOpacity>
+                </View>
+              }
             </ScrollView>
           )
         )
@@ -224,7 +267,7 @@ const { styles } = StyleSheet.create({
     gap: 15,
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     marginTop: 20,
   },
   profileImage: {
@@ -266,6 +309,23 @@ const { styles } = StyleSheet.create({
       fontSize: 22,
       width: 170,
     },
+  },
+  degreeContent: {
+    width: '100%',
+    backgroundColor: '#012C56',
+    padding: 5,
+    marginTop: 20,
+    borderTopLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  degree: {
+    fontSize: 13,
+    fontWeight: 'bold',
+    color: '#fff',
   },
   profileRut: {
     fontSize: 14,
