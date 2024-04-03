@@ -262,14 +262,14 @@ export default function Profile() {
                 :
                   <View style={styles.contentCode}>
                     <Text style={styles.credential}>Credencial Virtual</Text>
-                    <TouchableOpacity onPress={authenticateUser}>
-                      <Text>Clicke</Text>
-                    </TouchableOpacity>
-                    <Image
+                    <TouchableOpacity style={styles.contentBlur} onPress={authenticateUser}>
+                      <Text style={styles.titleBlur}>Haga click para ver el codigo de barras</Text>
+                      <Image
                         style={styles.barImageBlur}
                         blurRadius={5}
                         source={require('../../assets/bar.png')}
-                    />
+                      />
+                    </TouchableOpacity>
                   </View>
                 }
               </ScrollView>
@@ -411,13 +411,14 @@ const { styles } = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 10,
   },
-  barImageBlur: {
-    backgroundColor: '#00000071',
-    position: 'absolute',
-    top: 0,
-    left: 0,
+  contentBlur: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  cardContainer: {
-    backgroundColor: '#012C56 !important'
-  }
+  titleBlur: {
+    fontSize: 14,
+    marginBottom: 10,
+  },
 })
