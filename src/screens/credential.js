@@ -50,11 +50,6 @@ export default function Notes() {
 
                 if (success) {
                     setAuthenticated(true);
-                    Toast.show({
-                      type: ALERT_TYPE.SUCCESS,
-                      title: 'Acceso Permitido',
-                      textBody: 'Ahora puedes ver tu credencial virtual.',
-                    })
                   } else if (error === 'user_cancel') {
                     navigation.navigate('Profile');
                   } else {
@@ -106,16 +101,11 @@ export default function Notes() {
         <View style={styles.header}>
             <BackToHome route="Profile">Credencial Virtual</BackToHome>
             {authenticated && <TouchableOpacity onPress={() => {
-              Alert.alert(
-                'Información:',
-                'Este código podría ser solicitado en el ingreso a la sede o la biblioteca',
-                [
-                  {
-                    text: 'Aceptar',
-                  },
-                ],
-                { cancelable: false }
-              );
+              Toast.show({
+                type: ALERT_TYPE.INFO,
+                title: 'INFORMACION',
+                textBody: 'Este código podría ser solicitado en el ingreso a la sede o la biblioteca',
+             })
             }}>
                 <Info/>
             </TouchableOpacity>}

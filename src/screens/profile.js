@@ -199,7 +199,10 @@ export default function Profile() {
                       />
                     }
                   </View>
+                <View>
+                </View>
                 <View style={styles.degreeContent}>
+                  <Text style={styles.school}>{data.carreras[0].escuela}</Text>
                   <Text style={styles.degree}>{data.carreras[0].nomCarrera}</Text>
                 </View>
                 </View>
@@ -300,10 +303,16 @@ const { styles } = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'row',
+    flexDirection: 'column',
+  },
+  school: {
+    fontSize: 13,
+    fontWeight: '500',
+    color: '#dededefe',
+    marginBottom: 2,
   },
   degree: {
-    fontSize: 13,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#fff',
   },

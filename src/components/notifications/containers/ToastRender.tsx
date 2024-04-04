@@ -219,6 +219,26 @@ const __styles = (isDark: boolean) => {
         },
       }),
     },
+    [`${ALERT_TYPE.INFO}cardContainer`]: {
+      flexDirection: 'row',
+      paddingHorizontal: 12,
+      paddingTop: 12,
+      paddingBottom: 12,
+      backgroundColor: '#012C56',
+      borderWidth: 2,
+      borderColor: 'rgb(252, 189, 27)',
+      ...Platform.select({
+        ios: {
+          borderRadius: 12,
+          marginHorizontal: 12,
+        },
+        android: {
+          marginTop: 6,
+          borderRadius: 12,
+          marginHorizontal: 12,
+        },
+      }),
+    },
     labelContainer: {
       overflow: 'hidden',
       flex: 1,
@@ -257,9 +277,6 @@ const __styles = (isDark: boolean) => {
     },
     [`${ALERT_TYPE.WARNING}Image`]: {
       tintColor: Color.get('warning', isDark),
-    },
-    [`${ALERT_TYPE.INFO}Image`]: {
-      tintColor: Color.get('info', isDark),
-    },
+    }
   });
 };
