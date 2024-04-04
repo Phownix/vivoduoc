@@ -4,7 +4,7 @@ import * as LocalAuthentication from 'expo-local-authentication';
 import * as FileSystem from 'expo-file-system';
 import { useFocusEffect } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { Barcode } from 'expo-barcode-generator';
 import VerifyToken from '../middleware/verifyToken';
 import Constants from 'expo-constants';
@@ -13,6 +13,7 @@ import { StatusBar } from 'expo-status-bar';
 
 import BackToHome from '../components/backToHome';
 import PadLock from '../icons/padlock';
+import Info from '../icons/info';
 
 export default function Notes() {
   const navigation = useNavigation();
@@ -104,6 +105,20 @@ export default function Notes() {
       <AlertNotificationRoot theme="light">
         <View style={styles.header}>
             <BackToHome route="Profile">Credencial Virtual</BackToHome>
+            {authenticated && <TouchableOpacity onPress={() => {
+              Alert.alert(
+                'Información:',
+                'Este código podría ser solicitado en el ingreso a la sede o la biblioteca',
+                [
+                  {
+                    text: 'Aceptar',
+                  },
+                ],
+                { cancelable: false }
+              );
+            }}>
+                <Info/>
+            </TouchableOpacity>}
         </View>
         {authenticated ? 
             <View style={styles.main}>

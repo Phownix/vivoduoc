@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Login from '../screens/login';
 import Home from '../screens/home';
+import Ava from '../screens/ava'
 import Calendar from '../screens/calendar';
 import Notes from '../screens/notes';
 import Assistance from '../screens/assistance';
@@ -48,6 +49,7 @@ export default function Navigation() {
         >
             <Stack.Screen name="Login" component={Login} options={{ animationEnabled: true }}/>
             <Stack.Screen name="Home" component={Home}  options={{ animationEnabled: true }}/>
+            <Stack.Screen name="Ava" component={Ava}  options={{ animationEnabled: false }}/>
             <Stack.Screen name="Calendar" component={Calendar} options={{ animationEnabled: false }}/>
             <Stack.Screen name="Notes" component={Notes} options={{ animationEnabled: false }}/>
             <Stack.Screen name="Assistance" component={Assistance} options={{ animationEnabled: false }}/>

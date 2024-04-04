@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { View,Text, ScrollView, Image,Linking,Button, TouchableOpacity } from 'react-native';
+import Constants from 'expo-constants';
 import { useNavigation } from '@react-navigation/native';
 import StyleSheet from 'react-native-media-query';
 import { StatusBar } from 'expo-status-bar';
@@ -26,11 +27,8 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="light"/>
+      <StatusBar style="light" backgroundColor='#012C56'/>
       <View style={styles.header}>
-        <View style={styles.bgHeader}>
-          <Top/>
-        </View>
         <View style={styles.logoVivoDuoc}>
           <Image 
             source={require('../../assets/vivoduoc.png')}
@@ -53,6 +51,11 @@ export default function Home() {
                 <Text style={styles.podcastButtonText}>Escuchar en Spotify</Text>
               </TouchableOpacity>
             </View>
+            <TouchableOpacity style={styles.podcastButton} onPress={() => {
+                navigation.navigate('Ava');
+            }}>
+                <Text>IR A AVA</Text>
+              </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -72,18 +75,13 @@ const {styles} = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 10,
     position: 'relative',
-    paddingVertical: 50,
-  },
-  bgHeader: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    '@media (max-width: 479px)': {
-     
-    },
+    marginTop: Constants.statusBarHeight,
+    paddingVertical: 20,
+    backgroundColor: '#012C56',
   },
   main: {
     paddingHorizontal: 10,
+    paddingVertical: 20,
   },
   podcastContent: {
     padding: 10,
