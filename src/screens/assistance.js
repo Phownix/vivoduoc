@@ -70,7 +70,7 @@ export default function Assistance () {
     <View style={{ flex: 1 }}>
       <StatusBar style="dark" />
       <View style={styles.header}>
-        <BackToHome>Asistencias</BackToHome>
+        <BackToHome route="Home">Asistencias</BackToHome>
       </View>
       {error && selectedData ? (
         <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

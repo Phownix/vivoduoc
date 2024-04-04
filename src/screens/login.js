@@ -300,6 +300,7 @@ const Login = () => {
             </TouchableOpacity>
           </Animated.View>
         </ScrollView>
+        <Text style={styles.version}>Unofficial App Developed By evairx v0.1.0</Text>
       </AlertNotificationRoot>
       <View style={styles.bg}>
         <Test/>
@@ -636,5 +637,10 @@ const { styles }= StyleSheet.create({
     '@media (max-width: 430px)': {
       fontSize: 16,
     }
+  },
+  version: {
+    textAlign: 'center',
+    bottom: 20,
+    color: '#ffffff68',
   }
 });

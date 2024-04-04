@@ -8,6 +8,7 @@ import Calendar from '../screens/calendar';
 import Notes from '../screens/notes';
 import Assistance from '../screens/assistance';
 import Profile from '../screens/profile';
+import Credential from '../screens/credential'
 
 const Stack = createStackNavigator();
 
@@ -51,6 +52,7 @@ export default function Navigation() {
             <Stack.Screen name="Notes" component={Notes} options={{ animationEnabled: false }}/>
             <Stack.Screen name="Assistance" component={Assistance} options={{ animationEnabled: false }}/>
             <Stack.Screen name="Profile" component={Profile} options={{ animationEnabled: false }}/>
+            <Stack.Screen name="Credential" component={Credential} options={{ animationEnabled: true }}/>
         </Stack.Navigator>
     );
 }

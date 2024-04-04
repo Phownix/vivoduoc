@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { View, ScrollView ,Text,RefreshControl, Image,TouchableOpacity } from 'react-native';
 import { ALERT_TYPE, AlertNotificationRoot, Toast } from '../components/notifications';
-import * as LocalAuthentication from 'expo-local-authentication';
 import * as FileSystem from 'expo-file-system';
 import StyleSheet from 'react-native-media-query';
 import Constants from 'expo-constants';
@@ -9,12 +8,13 @@ import Loading from '../components/loading';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Barcode } from 'expo-barcode-generator';
 import VerifyToken from '../middleware/verifyToken';
 import BackToHome from '../components/backToHome';
 import Logout from '../components/logout'
 import Nav from '../components/nav';
-import { vh } from 'react-native-expo-viewport-units';
+
+import CredentialIcon from '../icons/credential';
+import HelIcon from '../icons/help'
 
 export default function Profile() {
   const [data, setData] = useState({});
@@ -87,7 +87,7 @@ export default function Profile() {
   };
 
   useEffect(() => {
-    const initData = async () => {
+    async function initData () {
       const directory = FileSystem.documentDirectory + 'data/';
       const fileName = 'profile.json';
       const filePath = directory + fileName;
@@ -140,60 +140,12 @@ export default function Profile() {
     shortName = `${firstName} ${lastName}`;
   }
 
-  const authenticateUser = async () => {
-    try {
-      const isBiometricAvailable = await LocalAuthentication.isEnrolledAsync();
-      const hasPasscode = await LocalAuthentication.hasHardwareAsync();
-
-      if (!isBiometricAvailable && !hasPasscode) {
-        setAuthenticated(true);
-        Toast.show({
-          type: ALERT_TYPE.SUCCESS,
-          title: 'Acceso Permitido',
-          textBody: 'Ahora puedes ver tu credencial virtual.',
-        })
-        return;
-      }
-
-      const promptMessage = isBiometricAvailable
-        ? 'Desbloquea para ver el contenido'
-        : 'Por favor, ingresa tu contraseña, patrón o PIN';
-
-      const { success, error } = await LocalAuthentication.authenticateAsync({
-          promptMessage,
-          fallbackLabel: 'Usar contraseña',
-        });
-
-      if (success) {
-        setAuthenticated(true);
-        Toast.show({
-          type: ALERT_TYPE.SUCCESS,
-          title: 'Acceso Permitido',
-          textBody: 'Ahora puedes ver tu credencial virtual.',
-        })
-      } else if (error === 'user_cancel') {
-        Toast.show({
-          type: ALERT_TYPE.DANGER,
-          title: 'Acceso Denegado',
-          textBody: 'Cancelaste la autenticación. Por favor, inténtalo de nuevo.',
-        })
-      } else {
-        console.log('Autenticación cancelada o error:', error);
-      }
-
-
-    } catch (error) {
-      console.error('Error al autenticar:', error);
-    }
-  };
-
   return (
     <View style={styles.container}>
       <StatusBar style="dark"/>
       <AlertNotificationRoot theme="light">
         <View style={styles.header}>
-          <BackToHome>Perfil Duoc</BackToHome>
-          <Logout/>
+          <BackToHome route="Home">Perfil Duoc</BackToHome>
         </View>
         {error ? (
           <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -251,27 +203,19 @@ export default function Profile() {
                   <Text style={styles.degree}>{data.carreras[0].nomCarrera}</Text>
                 </View>
                 </View>
-                {authenticated ? 
-                  <View style={styles.contentCode}>
-                    <Text style={styles.credential}>Credencial Virtual</Text>
-                    <Barcode
-                      value={`${data.rut}`}
-                      options={{ format: 'CODE128',  displayValue: 'false'}}
-                    />
-                  </View>
-                :
-                  <View style={styles.contentCode}>
-                    <Text style={styles.credential}>Credencial Virtual</Text>
-                    <TouchableOpacity style={styles.contentBlur} onPress={authenticateUser}>
-                      <Text style={styles.titleBlur}>Haga click para ver el codigo de barras</Text>
-                      <Image
-                        style={styles.barImageBlur}
-                        blurRadius={5}
-                        source={require('../../assets/bar.png')}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                }
+                <View style={styles.subMain}>
+                  <TouchableOpacity style={styles.btn} onPress={() => {
+                    navigation.navigate('Credential');
+                  }}>
+                    <CredentialIcon/>
+                    <Text style={styles.textBtn}>Credencial Virtual</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.btn}>
+                    <HelIcon/>
+                    <Text style={styles.textBtn}>Ayuda</Text>
+                  </TouchableOpacity>
+                  <Logout/>
+                </View>
               </ScrollView>
             )
           )
@@ -382,30 +326,6 @@ const { styles } = StyleSheet.create({
     fontSize: 14,
     marginTop: 5,
   },
-  contentCode: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-
-    height: vh(65),
-    '@media (max-height: 1366px)': {
-      height: vh(65),
-    },
-    '@media (max-height: 1024px)': {
-      height: vh(58),
-    },
-    '@media (max-height: 740px)': {
-      height: vh(52),
-    },
-    '@media (max-height: 667px)': {
-      height: vh(45),
-    },
-  },
-  credential: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginVertical: 10,
-  },
   errorText: {
     fontSize: 16,
     textAlign: 'center',
@@ -421,4 +341,28 @@ const { styles } = StyleSheet.create({
     fontSize: 14,
     marginBottom: 10,
   },
+  subMain: {
+    paddingHorizontal: 10,
+    marginTop: 30,
+    borderTopColor: 'rgba(220, 220, 220, 0.586) ',
+    borderTopWidth: 5,
+  },
+  btn: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 5,
+    borderRadius: 10,
+    marginTop: 20,
+    borderLeftWidth: 3,
+    borderRightWidth: 3,
+    borderColor: '#adadad',
+    gap: 7,
+    paddingHorizontal: 10,
+  },
+  textBtn: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: 2,
+  }
 })

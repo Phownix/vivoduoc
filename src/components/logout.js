@@ -3,6 +3,7 @@ import { TouchableOpacity, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import LogoutIcon from '../icons/logout'
+import StyleSheet from 'react-native-media-query';
 
 const Logout = () => {
   const navigation = useNavigation();
@@ -23,10 +24,32 @@ const Logout = () => {
   };
 
   return (
-    <TouchableOpacity onPress={handleLogout}>
+    <TouchableOpacity style={styles.btn} onPress={handleLogout}>
       <LogoutIcon/>
+      <Text style={styles.textBtn}>Cerrar Sesión</Text>
     </TouchableOpacity>
   );
 };
 
 export default Logout;
+
+const { styles } = StyleSheet.create({
+  btn: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 5,
+    borderRadius: 10,
+    marginTop: 20,
+    borderLeftWidth: 3,
+    borderRightWidth: 3,
+    borderColor: '#adadad',
+    gap: 7,
+    paddingHorizontal: 10,
+  },
+  textBtn: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: 5,
+  }
+})

@@ -146,7 +146,7 @@ const Calendar = () => {
     <View style={styles.container}>
       <StatusBar style="dark" />
       <View style={styles.header}>
-        <BackToHome style={styles.backText}>Horario</BackToHome>
+        <BackToHome  route="Home" style={styles.backText}>Horario</BackToHome>
         {horario && horario.nomCarrera && <Dropdown options={options} selectedValue={selectedDay} onValueChange={handleDropdownChange} />}
       </View>
       {error ? (

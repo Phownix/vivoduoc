@@ -11,7 +11,7 @@ export default function Notes() {
     <View style={styles.container}>
       <StatusBar style="dark"/>
       <View style={styles.header}>
-        <BackToHome>Notas</BackToHome>
+        <BackToHome route="Home">Notas</BackToHome>
       </View>
       <ScrollView style={styles.main}>
 
