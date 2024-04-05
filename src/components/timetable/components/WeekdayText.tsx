@@ -47,7 +47,8 @@ const getStyles = ({ cellWidth, theme }) =>
       color: theme.accent,
     },
     weekdayText: {
-      fontSize: 11,
+      fontSize: 13,
+      fontWeight: 'bold',
       color: 'white',
     },
   });

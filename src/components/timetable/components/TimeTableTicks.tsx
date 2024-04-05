@@ -34,9 +34,9 @@ const getStyles = (configs: Configs) =>
     },
     timeLineText: {
       marginTop: 1,
-      fontSize: 12,
+      fontSize: 13,
       textAlign: 'center',
-      color: 'rgba(131,127,127,0.6)',
+      color: 'black',
     },
     timeLineBox: {
       paddingLeft: 2,
