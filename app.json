@@ -32,6 +32,14 @@
       "softwareKeyboardLayoutMode" : "pan",
       "package": "com.evairx.vivoduoc"
     },
+    "plugins": [
+      [
+        "expo-font",
+        {
+          "fonts": ["assets/fonts/OpenSans.tff"]
+        }
+      ]
+    ],
     "extra": {
       "eas": {
         "projectId": "ae9a11b7-d6b2-4edd-8306-8b31f0b96bed"

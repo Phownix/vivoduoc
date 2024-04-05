@@ -14,7 +14,7 @@ export default function Loading() {
                     width: 200,
                     height: 200,
                 }}
-                source={require('../../assets/loading.json')}
+                source={require('../../assets/animations/loading.json')}
             />
         </View>
     )

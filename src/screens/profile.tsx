@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState,useEffect } from 'react';
 import { View, ScrollView ,Text,RefreshControl, Image,TouchableOpacity } from 'react-native';
 import { ALERT_TYPE, AlertNotificationRoot, Toast } from '../components/notifications';
 import * as FileSystem from 'expo-file-system';
@@ -37,6 +37,36 @@ export default function Profile () {
   const [error, setError] = useState<boolean>(false);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const navigation = useNavigation<INavigationProps>();
+
+  useEffect(() => {
+    const initData = async () => {
+      const directory = FileSystem.documentDirectory + 'data/';
+      const fileName = 'profile.json';
+      const filePath = directory + fileName;
+      try {
+        const directoryInfo = await FileSystem.getInfoAsync(directory);
+        if (!directoryInfo.exists) {
+          await FileSystem.makeDirectoryAsync(directory, { intermediates: true });
+        }
+  
+        const fileInfo = await FileSystem.getInfoAsync(filePath);
+        if (fileInfo.exists) {
+          const fileContent = await FileSystem.readAsStringAsync(filePath);
+          const profileJson = JSON.parse(fileContent);
+          console.log('Datos cargados desde el archivo JSON.');
+          setData(profileJson);
+          setLoading(false);
+        } else {
+          console.log('El archivo JSON no existe en el directorio.');
+          fetchData();
+        }
+      } catch (error) {
+        console.error('Error al inicializar los datos:', error);
+        setError(true);
+      }
+    };
+    initData();
+  }, [])
 
   VerifyToken('Login');
 
@@ -98,36 +128,6 @@ export default function Profile () {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    const initData = async () => {
-      const directory = FileSystem.documentDirectory + 'data/';
-      const fileName = 'profile.json';
-      const filePath = directory + fileName;
-      try {
-        const directoryInfo = await FileSystem.getInfoAsync(directory);
-        if (!directoryInfo.exists) {
-          await FileSystem.makeDirectoryAsync(directory, { intermediates: true });
-        }
-
-        const fileInfo = await FileSystem.getInfoAsync(filePath);
-        if (fileInfo.exists) {
-          const fileContent = await FileSystem.readAsStringAsync(filePath);
-          const profileJson = JSON.parse(fileContent);
-          console.log('Datos cargados desde el archivo JSON.');
-          setData(profileJson);
-          setLoading(false);
-        } else {
-          console.log('El archivo JSON no existe en el directorio.');
-          fetchData();
-        }
-      } catch (error) {
-        console.error('Error al inicializar los datos:', error);
-        setError(true);
-      }
-    };
-    initData();
-  }, []);
 
   const formatearRUT = (rut: string) => {
     rut = rut.replace(/[^\dKk]/g, '');

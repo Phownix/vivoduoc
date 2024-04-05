@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import StyleSheet from 'react-native-media-query';
 import { StatusBar } from 'expo-status-bar';
 
-
+import AvaIcon from '../icons/avaIcon'
 import Greeting from '../components/greeting';
 
 import Nav from '../components/nav';
@@ -40,9 +40,16 @@ export default function Home() {
             style={{ width: 145, height: 25 }}
           />
         </View>
-        <TouchableOpacity>
-          <Bars/>
-        </TouchableOpacity>
+        <View style={styles.rightBtns}>
+        <TouchableOpacity onPress={() => {
+          navigation.navigate('Ava');
+        }}>
+            <AvaIcon/>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Bars/>
+          </TouchableOpacity>
+        </View>
       </View>
       <ScrollView>
         <View style={styles.main}>
@@ -56,11 +63,6 @@ export default function Home() {
                 <Text style={styles.podcastButtonText}>Escuchar en Spotify</Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.podcastButton} onPress={() => {
-                navigation.navigate('Ava');
-            }}>
-                <Text>IR A AVA</Text>
-              </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -85,6 +87,13 @@ const {styles} = StyleSheet.create({
     backgroundColor: '#012C56',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
+  },
+  rightBtns: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignContent: 'center',
+    gap: 15,
   },
   main: {
     paddingHorizontal: 10,
