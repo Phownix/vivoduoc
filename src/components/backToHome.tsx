@@ -8,8 +8,13 @@ interface IRouteProps {
     children: React.ReactNode;
 }
 
+interface INavigationProps {
+    reset: (props: { index: number; routes: { name: string }[] }) => void;
+    navigate: (name: string) => void;
+}
+
 export default function BackToHome({ children, route }: IRouteProps) {
-    const navigation = useNavigation();
+    const navigation = useNavigation<INavigationProps>();
 
     return (
         <TouchableOpacity style={styles.backContent} onPress={() => navigation.navigate(route)}>

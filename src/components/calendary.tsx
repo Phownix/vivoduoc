@@ -5,10 +5,29 @@ import TimeTable from './timetable';
 import Close from '../icons/close';
 import { StatusBar } from 'expo-status-bar';
 
+interface Course {
+  nombre: string;
+  horaInicio: string;
+  horaFin: string;
+  seccion: string;
+  profesor: string;
+  sala: string;
+  sede: string;
+}
+
+interface Day {
+  dia: string;
+  ramos: Course[];
+}
+
+interface Career {
+  dias: Day[];
+}
+
 export default function HorarioPage() {
-  const [eventSelected, setEventSelected] = useState<boolean | null>(null);
+  const [eventSelected, setEventSelected] = useState<Course | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [Horario, setHorario] = useState<[]>([]);
+  const [Horario, setHorario] = useState<Career[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {

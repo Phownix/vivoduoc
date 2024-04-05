@@ -5,18 +5,21 @@ import { useNavigation } from '@react-navigation/native';
 import LogoutIcon from '../icons/logout'
 import StyleSheet from 'react-native-media-query';
 
+interface INavigationProps {
+  reset: (props: { index: number; routes: { name: string }[] }) => void;
+  navigate: (name: string) => void;
+}
+
 const Logout = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<INavigationProps>();
 
   const handleLogout = async () => {
     try {
-      // Eliminar los datos de acceso del AsyncStorage
       await AsyncStorage.removeItem('access_token');
       await AsyncStorage.removeItem('idAlumno');
       await AsyncStorage.removeItem('codAlumno');
       await AsyncStorage.removeItem('rut');
-
-      // Redirigir al usuario a la pantalla de inicio de sesión
+      
       navigation.reset({ index: 0, routes: [{ name: 'Login' }]});
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
