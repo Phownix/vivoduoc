@@ -26,12 +26,17 @@ interface IDataProps {
   }[];
 }
 
+interface INavigationProps {
+  reset: (props: { index: number; routes: { name: string }[] }) => void;
+  navigate: (name: string) => void;
+}
+
 export default function Profile () {
   const [data, setData] = useState<IDataProps | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const navigation = useNavigation();
+  const navigation = useNavigation<INavigationProps>();
 
   VerifyToken('Login');
 
@@ -328,7 +333,6 @@ const { styles } = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     marginTop: 5,
-    fontWeight: 'bold',
     '@media (max-width: 820px)': {
       fontSize: 20,
     },

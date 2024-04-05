@@ -11,7 +11,18 @@ import Assistance from '../screens/assistance';
 import Profile from '../screens/profile';
 import Credential from '../screens/credential'
 
-const Stack = createStackNavigator();
+type RootStackNavigatorProps = {
+  Home: undefined;
+  Login: undefined;
+  Ava: undefined;
+  Calendar: undefined;
+  Notes: undefined;
+  Assistance: undefined;
+  Profile: undefined;
+  Credential: undefined;
+};
+
+const Stack = createStackNavigator<RootStackNavigatorProps>();
 
 export default function Navigation() {
     const [initialRoute, setInitialRoute] = useState<string>('Login');

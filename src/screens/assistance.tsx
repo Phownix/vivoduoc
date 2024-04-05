@@ -25,13 +25,18 @@ interface ICarrera {
   }[];
 }
 
+interface INavigationProps {
+  reset: (props: { index: number; routes: { name: string }[] }) => void;
+  navigate: (name: string) => void;
+}
+
 export default function Assistance() {
   const [data, setData] = useState<ICarrera[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedData, setSelectedData] = useState<ICarrera | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
-  const navigation = useNavigation();
+  const navigation = useNavigation<INavigationProps>();
 
   useEffect(() => {
     const fetchData = async () => {

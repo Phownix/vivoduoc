@@ -13,19 +13,21 @@ import Calendary from '../components/calendary';
 import Dropdown from '../components/dropdown';
 import Nav from '../components/nav';
 
-
 const options: string[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Semana'];
 
-// Define el componente Calendar
+interface INavigationProps {
+  reset: (props: { index: number; routes: { name: string }[] }) => void;
+  navigate: (name: string) => void;
+}
+
 const Calendar: React.FC = () => {
   const [horario, setHorario] = useState<any | []>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedDay, setSelectedDay] = useState<string>('Semana');
   const [error, setError] = useState<boolean>(false);
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const navigation = useNavigation();
+  const navigation = useNavigation<INavigationProps>();
 
-  // Función para manejar el evento de refrescar
   const onRefresh = () => {
     setRefreshing(true);
     setLoading(true);

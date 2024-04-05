@@ -5,16 +5,22 @@ import { useNavigation } from '@react-navigation/native';
 import StyleSheet from 'react-native-media-query';
 import { StatusBar } from 'expo-status-bar';
 
+
 import Greeting from '../components/greeting';
 
 import Nav from '../components/nav';
 import Bars from '../icons/bars';
 import Spotify from '../icons/spotify';
 
+interface INavigationProps {
+  reset: (props: { index: number; routes: { name: string }[] }) => void;
+  navigate: (name: string) => void;
+}
+
 const podcastURL = 'https://open.spotify.com/show/2qhwWynrwdxnAeFCZZndGx';
 
 export default function Home() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<INavigationProps>();
 
   const handlePress = useCallback(async () => {
     const supported = await Linking.canOpenURL(podcastURL);

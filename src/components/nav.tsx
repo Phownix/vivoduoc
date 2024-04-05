@@ -8,8 +8,13 @@ import NotesIcon from '../icons/notes'
 import AssistanceIcon from '../icons/assistance'
 import ProfileIcon from '../icons/profile'
 
+interface INavigationProps {
+    reset: (props: { index: number; routes: { name: string }[] }) => void;
+    navigate: (name: string) => void;
+}
+
 export default function Nav() {
-    const navigation = useNavigation();
+    const navigation = useNavigation<INavigationProps>();
     const route = useRoute()
 
     const options = [
@@ -65,8 +70,6 @@ const { styles } = StyleSheet.create({
         height: 100,
         width: 64,
         padding: 8,
-        flexDirection: 'column',
-        alignContent: 'center',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',

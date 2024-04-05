@@ -19,6 +19,11 @@ import Test from '../icons/test'
 
 type Props = {};
 
+interface INavigationProps {
+  reset: (props: { index: number; routes: { name: string }[] }) => void;
+  navigate: (name: string) => void;
+}
+
 const Login: React.FC<Props> = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -33,7 +38,7 @@ const Login: React.FC<Props> = () => {
   const opacity = useSharedValue(0);
   const opacityFade = useSharedValue(0);
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<INavigationProps>();
 
   useFocusEffect(
     useCallback(() => {

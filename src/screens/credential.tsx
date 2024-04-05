@@ -16,11 +16,16 @@ import PadLock from '../icons/padlock';
 import Info from '../icons/info';
 
 
+interface INavigationProps {
+  reset: (props: { index: number; routes: { name: string }[] }) => void;
+  navigate: (name: string) => void;
+}
+
 export default function Notes() {
-  const navigation = useNavigation();
   const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [data, setData] = useState<any | {}>({});
   const [error, setError] = useState<boolean>(false);
+  const navigation = useNavigation<INavigationProps>();
 
   VerifyToken('Login');
 
