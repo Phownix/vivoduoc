@@ -15,10 +15,14 @@ import BackToHome from '../components/backToHome';
 import PadLock from '../icons/padlock';
 import Info from '../icons/info';
 
-
 interface INavigationProps {
   reset: (props: { index: number; routes: { name: string }[] }) => void;
   navigate: (name: string) => void;
+}
+
+interface IAuthProps {
+  success: boolean;
+  error?: string;
 }
 
 export default function Notes() {
@@ -37,31 +41,31 @@ export default function Notes() {
                 const hasPasscode = await LocalAuthentication.hasHardwareAsync();
 
                 if (!isBiometricAvailable && !hasPasscode) {
-                    setAuthenticated(true);
-                    Toast.show({
-                      type: ALERT_TYPE.SUCCESS,
-                      title: 'Acceso Permitido',
-                      textBody: 'Ahora puedes ver tu credencial virtual.',
-                    })
-                    return;
+                  setAuthenticated(true);
+                  Toast.show({
+                    type: ALERT_TYPE.SUCCESS,
+                    title: 'Acceso Permitido',
+                    textBody: 'Ahora puedes ver tu credencial virtual.',
+                  })
+                  return;
                 }
 
                 const promptMessage = isBiometricAvailable
-                    ? 'Desbloquea para ver el contenido'
-                    : 'Por favor, ingresa tu contraseña, patrón o PIN';
+                  ? 'Desbloquea para ver el contenido'
+                  : 'Por favor, ingresa tu contraseña, patrón o PIN';
 
-                const { success, error } = await LocalAuthentication.authenticateAsync({
-                    promptMessage,
-                    fallbackLabel: 'Usar contraseña',
+                const auth: IAuthProps = await LocalAuthentication.authenticateAsync({
+                  promptMessage,
+                  fallbackLabel: 'Usar contraseña',
                 });
 
-                if (success) {
-                    setAuthenticated(true);
-                  } else if (error === 'user_cancel') {
-                    navigation.navigate('Profile');
-                  } else {
-                    console.log('Autenticación cancelada o error:', error);
-                  }
+                if (auth.success) {
+                  setAuthenticated(true);
+                } else if (auth.error === 'user_cancel') {
+                  navigation.navigate('Profile');
+                } else {
+                  console.log('Autenticación cancelada o error:', error);
+                }
             } catch (error) {
                 console.error('Error al autenticar:', error);
             }
