@@ -1,8 +1,12 @@
 import * as React from "react"
 import Svg, { Path } from "react-native-svg"
 
-const Assistance = ({iconColor}) => (
-  <Svg xmlns="http://www.w3.org/2000/svg"
+interface IColor {
+  iconColor: string;
+}
+
+const Assistance = ({iconColor}: IColor) => (
+  <Svg
     width={28}
     height={28}
     fill="none"
@@ -21,4 +25,4 @@ const Assistance = ({iconColor}) => (
     />
   </Svg>
 )
-export default Assistance
+export default Assistance;

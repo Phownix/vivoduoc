@@ -1,14 +1,12 @@
 import * as React from "react"
 import Svg, { G, Path } from "react-native-svg"
 
-const LoginIcon = (props) => (
+const LoginIcon = () => (
   <Svg
-    xmlns="http://www.w3.org/2000/svg"
     width={26}
     height={26}
     fill="none"
     viewBox="0 0 24 24"
-    {...props}
   >
     <G stroke="#fff" strokeLinecap="round" strokeWidth={1.5}>
       <Path d="M20 12a8 8 0 0 0-8-8m0 16a7.985 7.985 0 0 0 6.245-3" />

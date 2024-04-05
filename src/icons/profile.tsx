@@ -1,9 +1,14 @@
 import * as React from "react"
 import Svg, { G, Path } from "react-native-svg"
 
-const Profile = ({iconColor, heightIcon, widthIcon}) => (
+interface IColor {
+  iconColor: string;
+  heightIcon: number;
+  widthIcon: number;
+}
+
+const Profile = ({iconColor, heightIcon, widthIcon}:IColor) => (
   <Svg
-    xmlns="http://www.w3.org/2000/svg"
     width={widthIcon}
     height={heightIcon}
     fill="none"

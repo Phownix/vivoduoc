@@ -4,7 +4,6 @@ import Svg, { Path } from "react-native-svg"
 
 const Back = () => (
   <Svg
-    xmlns="http://www.w3.org/2000/svg"
     style={styles.main}
     stroke="#012C56"
     viewBox="-4.5 0 20 20"

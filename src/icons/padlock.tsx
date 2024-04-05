@@ -3,7 +3,6 @@ import Svg, { Path } from "react-native-svg"
 
 const PadLock = () => (
   <Svg
-    xmlns="http://www.w3.org/2000/svg"
     width={183}
     height={183}
     fill="none"

@@ -1,9 +1,12 @@
 import * as React from "react"
 import Svg, { Path } from "react-native-svg"
 
-const Calendar = ({iconColor}) => (
+interface IColor {
+  iconColor: string;
+}
+
+const Calendar = ({iconColor}: IColor) => (
   <Svg
-    xmlns="http://www.w3.org/2000/svg"
     width={26}
     height={26}
     fill={`${iconColor}`}
