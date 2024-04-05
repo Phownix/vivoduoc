@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import {ActivityIndicator, View, Image, TouchableOpacity, TextInput, Text, ScrollView} from 'react-native';
 import StyleSheet from 'react-native-media-query';
-import { ALERT_TYPE, AlertNotificationRoot, Toast } from '../components/notifications';
+import { ALERT_TYPE, AlertNotificationRoot, Toast } from '@/components/notifications';
 import Animated, { useSharedValue, withSpring, useAnimatedStyle, interpolate, Extrapolate, withTiming } from 'react-native-reanimated';
 import Checkbox from 'expo-checkbox';
 import { StatusBar } from 'expo-status-bar';
@@ -10,12 +10,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { useFocusEffect } from '@react-navigation/native';
 
-import ProfileIco from '../icons/profile';
-import PasswordIco from '../icons/password'
-import ViewIcon from '../icons/view'
-import View2Icon from '../icons/view2'
-import LoginIcon from '../icons/login'
-import Test from '../icons/test'
+import ProfileIco from '@/icons/profile';
+import PasswordIco from '@/icons/password'
+import ViewIcon from '@/icons/view'
+import View2Icon from '@/icons/view2'
+import LoginIcon from '@/icons/login'
+import Test from '@/icons/test'
 
 type Props = {};
 

@@ -1,7 +1,7 @@
 import { Text, TouchableOpacity } from 'react-native';
 import StyleSheet from 'react-native-media-query';
 import { useNavigation } from '@react-navigation/native';
-import BackIcon from '../icons/back';
+import BackIcon from '@/icons/back';
 
 interface IRouteProps {
     route: string;

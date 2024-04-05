@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import Login from '../screens/login';
-import Home from '../screens/home';
-import Ava from '../screens/ava'
-import Calendar from '../screens/calendar';
-import Notes from '../screens/notes';
-import Assistance from '../screens/assistance';
-import Profile from '../screens/profile';
-import Credential from '../screens/credential'
+import Login from '@/screens/login';
+import Home from '@/screens/home';
+import Ava from '@/screens/ava'
+import Calendar from '@/screens/calendar';
+import Notes from '@/screens/notes';
+import Assistance from '@/screens/assistance';
+import Profile from '@/screens/profile';
+import Credential from '@/screens/credential'
 
 type RootStackNavigatorProps = {
   Home: undefined;

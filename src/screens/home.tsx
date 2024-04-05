@@ -1,16 +1,16 @@
 import { useCallback } from 'react';
-import { View,Text, ScrollView, Image,Linking,Button, TouchableOpacity } from 'react-native';
+import { View,Text, ScrollView, Image,Linking, TouchableOpacity } from 'react-native';
 import Constants from 'expo-constants';
 import { useNavigation } from '@react-navigation/native';
 import StyleSheet from 'react-native-media-query';
 import { StatusBar } from 'expo-status-bar';
 
-import AvaIcon from '../icons/avaIcon'
-import Greeting from '../components/greeting';
+import AvaIcon from '@/icons/avaIcon'
+import Greeting from '@/components/greeting';
 
-import Nav from '../components/nav';
-import Bars from '../icons/bars';
-import Spotify from '../icons/spotify';
+import Nav from '@/components/nav';
+import Bars from '@/icons/bars';
+import Spotify from '@/icons/spotify';
 
 interface INavigationProps {
   reset: (props: { index: number; routes: { name: string }[] }) => void;

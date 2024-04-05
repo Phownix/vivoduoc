@@ -1,19 +1,19 @@
 import { useCallback, useState } from 'react';
-import { ALERT_TYPE, AlertNotificationRoot, Toast } from '../components/notifications';
+import { ALERT_TYPE, AlertNotificationRoot, Toast } from '@/components/notifications';
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as FileSystem from 'expo-file-system';
 import { useFocusEffect } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Barcode } from 'expo-barcode-generator';
-import VerifyToken from '../middleware/verifyToken';
+import VerifyToken from '@/middleware/verifyToken';
 import Constants from 'expo-constants';
 import { vh } from 'react-native-expo-viewport-units';
 import { StatusBar } from 'expo-status-bar';
 
-import BackToHome from '../components/backToHome';
-import PadLock from '../icons/padlock';
-import Info from '../icons/info';
+import BackToHome from '@/components/backToHome';
+import PadLock from '@/icons/padlock';
+import Info from '@/icons/info';
 
 interface INavigationProps {
   reset: (props: { index: number; routes: { name: string }[] }) => void;

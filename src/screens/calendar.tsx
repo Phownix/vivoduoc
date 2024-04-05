@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { View, ScrollView, RefreshControl, Text } from 'react-native';
 import StyleSheet from 'react-native-media-query';
 import Constants from 'expo-constants';
-import Loading from '../components/loading';
+import Loading from '@/components/loading';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import * as FileSystem from 'expo-file-system';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import BackToHome from '../components/backToHome';
-import ClaseItem from '../components/classItem';
-import Calendary from '../components/calendary';
-import Dropdown from '../components/dropdown';
-import Nav from '../components/nav';
+import BackToHome from '@/components/backToHome';
+import ClaseItem from '@/components/classItem';
+import Calendary from '@/components/calendary';
+import Dropdown from '@/components/dropdown';
+import Nav from '@/components/nav';
 
 const options: string[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Semana'];
 
@@ -120,6 +120,19 @@ const Calendar: React.FC = () => {
       }
     };
     initData();
+  }, []);
+
+  useEffect(() => {
+    const today = new Date();
+    const dayOfWeek = today.getDay();
+
+    const formattedDateString: string = today.toLocaleDateString('es', { weekday: 'long' });
+
+    if (dayOfWeek === 0) {
+      setSelectedDay('Semana');
+    } else {
+      setSelectedDay(capitalizeFirstLetter(formattedDateString));
+    }
   }, []);
 
   // Función para capitalizar la primera letra de una cadena

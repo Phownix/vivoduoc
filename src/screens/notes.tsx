@@ -2,8 +2,8 @@ import { View,ScrollView, Text, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
 import { StatusBar } from 'expo-status-bar';
 
-import BackToHome from '../components/backToHome';
-import Nav from '../components/nav';
+import BackToHome from '@/components/backToHome';
+import Nav from '@/components/nav';
 
 export default function Notes() {
 

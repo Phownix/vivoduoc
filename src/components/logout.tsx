@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import LogoutIcon from '../icons/logout'
+import LogoutIcon from '@/icons/logout'
 import StyleSheet from 'react-native-media-query';
 
 interface INavigationProps {

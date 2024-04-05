@@ -1,12 +1,12 @@
-import { View, Text,TouchableOpacity } from 'react-native'
+import { View,TouchableOpacity } from 'react-native'
 import StyleSheet from 'react-native-media-query';
 import { useNavigation, useRoute } from '@react-navigation/native'
 
-import HomeIcon from '../icons/home'
-import CalendarIcon from '../icons/calendar'
-import NotesIcon from '../icons/notes'
-import AssistanceIcon from '../icons/assistance'
-import ProfileIcon from '../icons/profile'
+import HomeIcon from '@/icons/home'
+import CalendarIcon from '@/icons/calendar'
+import NotesIcon from '@/icons/notes'
+import AssistanceIcon from '@/icons/assistance'
+import ProfileIcon from '@/icons/profile'
 
 interface INavigationProps {
     reset: (props: { index: number; routes: { name: string }[] }) => void;

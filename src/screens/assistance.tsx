@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, TouchableWithoutFeedback ,Modal ,View, ScrollView ,Text, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
-import Loading from '../components/loading';
+import Loading from '@/components/loading';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import BackToHome from '../components/backToHome';
-import Nav from '../components/nav';
+import BackToHome from '@/components/backToHome';
+import Nav from '@/components/nav';
 
-import DropdownIcon from '../icons/dropdown'
-import DropdownReverseIcon from '../icons/dropdown-reverse'
+import DropdownIcon from '@/icons/dropdown'
+import DropdownReverseIcon from '@/icons/dropdown-reverse'
 
 interface ICarrera {
   nomCarrera: string;

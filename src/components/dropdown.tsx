@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, Text, TouchableOpacity, Modal } from 'react-native';
 import StyleSheet from 'react-native-media-query';
-import Close from '../icons/close';
+import Close from '@/icons/close';
 
 interface IDropdownProps {
     options: string[];

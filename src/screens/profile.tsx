@@ -1,20 +1,19 @@
 import { useState,useEffect } from 'react';
 import { View, ScrollView ,Text,RefreshControl, Image,TouchableOpacity } from 'react-native';
-import { ALERT_TYPE, AlertNotificationRoot, Toast } from '../components/notifications';
 import * as FileSystem from 'expo-file-system';
 import StyleSheet from 'react-native-media-query';
 import Constants from 'expo-constants';
-import Loading from '../components/loading';
+import Loading from '@/components/loading';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import VerifyToken from '../middleware/verifyToken';
-import BackToHome from '../components/backToHome';
-import Logout from '../components/logout'
-import Nav from '../components/nav';
+import VerifyToken from '@/middleware/verifyToken';
+import BackToHome from '@/components/backToHome';
+import Logout from '@/components/logout'
+import Nav from '@/components/nav';
 
-import CredentialIcon from '../icons/credential';
-import HelIcon from '../icons/help'
+import CredentialIcon from '@/icons/credential';
+import HelIcon from '@/icons/help'
 
 interface IDataProps {
   nombreCompleto: string;
@@ -156,88 +155,86 @@ export default function Profile () {
   return (
     <View style={styles.container}>
       <StatusBar style="dark" />
-      <AlertNotificationRoot theme="light">
-        <View style={styles.header}>
-          <BackToHome route="Home">Perfil Duoc</BackToHome>
-        </View>
-        {error ? (
-          <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={styles.errorText}>No se ha podido conectar con el servidor de DuocUc. Por favor, inténtelo de nuevo más tarde.</Text>
-          </ScrollView>
-        ) : (
-          loading ? (
-            <ScrollView
-              contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-              refreshControl={
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={onRefresh}
-                  colors={['#012C56']}
-                  progressBackgroundColor="rgb(252, 189, 27)"
+      <View style={styles.header}>
+        <BackToHome route="Home">Perfil Duoc</BackToHome>
+      </View>
+      {error ? (
+        <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={styles.errorText}>No se ha podido conectar con el servidor de DuocUc. Por favor, inténtelo de nuevo más tarde.</Text>
+        </ScrollView>
+      ) : (
+        loading ? (
+        <ScrollView
+          contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={['#012C56']}
+              progressBackgroundColor="rgb(252, 189, 27)"
+            />
+          }
+        >
+          <Loading />
+        </ScrollView>
+      ) : (
+        data && data.nombreCompleto && (
+          <ScrollView
+            onScroll={handleScroll}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                colors={['#012C56']}
+                progressBackgroundColor="rgb(252, 189, 27)"
                 />
-              }
-            >
-              <Loading />
-            </ScrollView>
-          ) : (
-            data && data.nombreCompleto && (
-              <ScrollView
-                onScroll={handleScroll}
-                refreshControl={
-                  <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                    colors={['#012C56']}
-                    progressBackgroundColor="rgb(252, 189, 27)"
+            }
+          >
+            <View style={styles.main}>
+              <View style={styles.profileContent}>
+                <View>
+                  <Text style={styles.profileName}>{shortName}</Text>
+                  <Text>{rutFormateado}</Text>
+                </View>
+                {data && data?.avatar ?
+                  <Image
+                    style={styles.profileImage}
+                    source={{
+                      uri: data.avatar,
+                    }}
+                  />
+                  :
+                  <Image
+                    style={styles.profileImage}
+                    source={require('../../assets/profile.png')}
                   />
                 }
-              >
-                <View style={styles.main}>
-                  <View style={styles.profileContent}>
-                    <View>
-                      <Text style={styles.profileName}>{shortName}</Text>
-                      <Text>{rutFormateado}</Text>
-                    </View>
-                    {data && data?.avatar ?
-                      <Image
-                        style={styles.profileImage}
-                        source={{
-                          uri: data.avatar,
-                        }}
-                      />
-                      :
-                      <Image
-                        style={styles.profileImage}
-                        source={require('../../assets/profile.png')}
-                      />
-                    }
-                  </View>
-                  <View>
-                  </View>
-                  <View style={styles.degreeContent}>
-                    <Text style={styles.school}>{data.carreras[0].escuela}</Text>
-                    <Text style={styles.degree}>{data.carreras[0].nomCarrera}</Text>
-                  </View>
+              </View>
+              <View>
+            </View>
+                <View style={styles.degreeContent}>
+                  <Text style={styles.school}>{data.carreras[0].escuela}</Text>
+                  <Text style={styles.degree}>{data.carreras[0].nomCarrera}</Text>
                 </View>
-                <View style={styles.subMain}>
-                  <TouchableOpacity style={styles.btn} onPress={() => {
+              </View>
+              <View style={styles.subMain}>
+                <TouchableOpacity style={styles.btn} onPress={() => {
                     navigation.navigate('Credential');
-                  }}>
-                    <CredentialIcon />
-                    <Text style={styles.textBtn}>Credencial Virtual</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.btn}>
-                    <HelIcon />
-                    <Text style={styles.textBtn}>Ayuda</Text>
-                  </TouchableOpacity>
-                  <Logout />
-                </View>
-              </ScrollView>
-            )
+                }}>
+                  <CredentialIcon />
+                  <Text style={styles.textBtn}>Credencial Virtual</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.btn}>
+                  <HelIcon />
+                  <Text style={styles.textBtn}>Ayuda</Text>
+                </TouchableOpacity>
+                <Logout />
+              </View>
+            </ScrollView>
           )
-        )}
-        <Nav />
-      </AlertNotificationRoot>
+        )
+      )}
+      <Nav />
     </View>
   );
 }
