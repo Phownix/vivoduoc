@@ -32,7 +32,7 @@ export default function Home() {
         <View style={styles.logoVivoDuoc}>
           <Image 
             source={require('../../assets/vivoduoc.png')}
-            style={{ width: 165, height: 30 }}
+            style={{ width: 145, height: 25 }}
           />
         </View>
         <TouchableOpacity>
@@ -78,6 +78,8 @@ const {styles} = StyleSheet.create({
     marginTop: Constants.statusBarHeight,
     paddingVertical: 20,
     backgroundColor: '#012C56',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
   main: {
     paddingHorizontal: 10,

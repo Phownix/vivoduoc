@@ -52,6 +52,8 @@ const { styles } = StyleSheet.create({
     container: {
         width: '100%',
         backgroundColor: '#012C56',
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
         height: 65,
     },
     main: {

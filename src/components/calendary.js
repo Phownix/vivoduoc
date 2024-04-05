@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ActivityIndicator, View, StyleSheet, Modal, Text, TouchableOpacity } from 'react-native';
 import * as FileSystem from 'expo-file-system';
-import TimeTable from '@mikezzb/react-native-timetable';
+import TimeTable from '../components/timetable';
 import Close from '../icons/close';
 import { StatusBar } from 'expo-status-bar';
 
