@@ -35,7 +35,7 @@ const WeekdayText: FC = () => {
   );
 };
 
-const getStyles = ({ cellWidth, theme }) =>
+const getStyles = ({ cellWidth, theme }:any ) =>
   StyleSheet.create({
     weekdayCell: {
       width: cellWidth,

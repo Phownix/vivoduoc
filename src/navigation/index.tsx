@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { update } from '@/middleware/update';
 
 import Login from '@/screens/login';
 import Home from '@/screens/home';
@@ -24,9 +25,11 @@ type RootStackNavigatorProps = {
 
 const Stack = createStackNavigator<RootStackNavigatorProps>();
 
-export default function Navigation() {
-    const [initialRoute, setInitialRoute] = useState<string>('Login');
+export default function Navigation({}) {
+    const [initialRoute, setInitialRoute] = useState<any>('Login');
     const [loading, setLoading] = useState<boolean>(true);
+
+    console.log(update);
 
     useEffect(() => {
       const checkTokenAndNavigate = async () => {

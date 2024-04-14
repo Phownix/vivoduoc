@@ -12,7 +12,6 @@ export default function App() {
             style={styles.container}
             source={{ uri: 'https://campusvirtual.duoc.cl/' }}
         />
-        <Nav/>
     </>
   );
 }

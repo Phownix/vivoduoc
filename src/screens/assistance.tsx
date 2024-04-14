@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, TouchableWithoutFeedback ,Modal ,View, ScrollView ,Text, StyleSheet } from 'react-native';
+import { TouchableOpacity, TouchableWithoutFeedback ,Modal ,View, ScrollView ,Text, StyleSheet, FlatList } from 'react-native';
 import Constants from 'expo-constants';
 import Loading from '@/components/loading';
 import { StatusBar } from 'expo-status-bar';
@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import BackToHome from '@/components/backToHome';
 import Nav from '@/components/nav';
+import Close from '@/icons/close';
 
 import DropdownIcon from '@/icons/dropdown'
 import DropdownReverseIcon from '@/icons/dropdown-reverse'
@@ -22,8 +23,13 @@ interface ICarrera {
       clasesAsistente: number;
       clasesRealizadas: number;
     };
+    detalle?: {
+      fechaLarga: string;
+      asistencia: string;
+    }[];
   }[];
 }
+
 
 interface INavigationProps {
   reset: (props: { index: number; routes: { name: string }[] }) => void;
@@ -34,7 +40,9 @@ export default function Assistance() {
   const [data, setData] = useState<ICarrera[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedData, setSelectedData] = useState<ICarrera | null>(null);
+  const [selectedItem, setSelectedItem] = useState(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [optionSelect, setOptionSelect] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const navigation = useNavigation<INavigationProps>();
 
@@ -84,9 +92,15 @@ export default function Assistance() {
     fetchData();
   }, []);
 
+  const handlePress = (index:any) => {
+    setModalVisible(true)
+    setSelectedItem(selectedItem === index ? null : index);
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <StatusBar style="dark" />
+      {modalVisible && <StatusBar style="dark" backgroundColor="rgba(0, 0, 0, 0.483)" />}
       <View style={styles.header}>
         <BackToHome route="Home">Asistencias</BackToHome>
       </View>
@@ -100,21 +114,23 @@ export default function Assistance() {
         </ScrollView>
       ) : (
         <ScrollView>
-          <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.titleHeaderContent}>
+          <TouchableOpacity onPress={() => setOptionSelect(!optionSelect)} style={styles.titleHeaderContent}>
             <View style={styles.titleHeader}>
               <Text style={styles.titleHeaderText}>{selectedData?.nomCarrera}</Text>
-              <View style={{ marginTop: modalVisible ? 0 : 5 }}>
-                {modalVisible ? <DropdownReverseIcon /> : <DropdownIcon />}
+              <View style={{ marginTop: optionSelect ? 0 : 5 }}>
+                {optionSelect ? <DropdownReverseIcon /> : <DropdownIcon />}
               </View>
             </View>
           </TouchableOpacity>
-
+          
           <View style={styles.asigMain}>
-            {selectedData?.asistenciaAsignaturas.map((asignatura, index) => (
-              <TouchableOpacity key={index} style={styles.asignatureContainer}>
-                <Text style={styles.titleAsignature}>{asignatura.cabecera.nomAsignatura}</Text>
-                <Text style={styles.subAsiganute}>{asignatura.cabecera.codAsignatura}</Text>
-                <Text style={styles.porcentajeAsignature}>{asignatura.cabecera.porcentaje}% ({asignatura.cabecera.clasesAsistente} de {asignatura.cabecera.clasesRealizadas} clases)</Text>
+            {selectedData && selectedData.asistenciaAsignaturas.map((item, index) => (
+              <TouchableOpacity style={styles.asignatureContainer} key={index} onPress={() => handlePress(index)}>
+                <View>
+                <Text style={styles.titleAsignature}>{item.cabecera.nomAsignatura}</Text>
+                <Text style={styles.subAsiganute}>{item.cabecera.codAsignatura}</Text>
+                <Text style={styles.porcentajeAsignature}>{item.cabecera.porcentaje}% ({item.cabecera.clasesAsistente} de {item.cabecera.clasesRealizadas} clases)</Text>
+                </View>
               </TouchableOpacity>
             ))}
           </View>
@@ -123,41 +139,43 @@ export default function Assistance() {
             animationType="fade"
             transparent={true}
             visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(!modalVisible);
-            }}
+            onRequestClose={() => setModalVisible(false)}
           >
-            <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-              <View style={styles.modalOverlay}>
-                <View style={styles.optionsContainer}>
-                  <View style={styles.modalContent}>
-                    <Text style={styles.titleModal}>Selecciona una carrera:</Text>
-                    <ScrollView style={{ marginTop: 10 }}>
-                      {data.map((carrera, index) => (
-                        <TouchableOpacity
-                          key={index}
-                          style={styles.optionBtn}
-                          onPress={() => {
-                            setSelectedData(carrera);
-                            setModalVisible(false);
-                          }}
-                        >
-                          <Text style={selectedData?.nomCarrera === carrera.nomCarrera ? styles.optionTextActive : styles.optionText}>{carrera.nomCarrera}</Text>
-                        </TouchableOpacity>
-                      ))}
-                    </ScrollView>
-                  </View>
-                </View>
-              </View>
-            </TouchableWithoutFeedback>
+            <TouchableOpacity
+              style={styles.containerClose}
+              onPress={() => setModalVisible(false)}
+            >
+              <Close />
+            </TouchableOpacity>
+            <View style={styles.modalContainer}>
+              <ScrollView style={styles.modalMain}>
+                  {selectedData && selectedData.asistenciaAsignaturas.map((item, index) => (
+                    selectedItem === index && (
+                      <View key={index} style={{marginBottom: 35}}>
+                        <Text style={styles.titleAsig}>{item.cabecera.nomAsignatura}</Text>
+                          <View style={{...styles.contentData, marginBottom: 10}}>
+                            <Text style={styles.titleData}>Fecha</Text>
+                            <Text style={styles.titleData}>Asistencia</Text>
+                          </View>
+                          {item.detalle.map((detalleItem, detalleIndex) => (
+                            <View key={detalleIndex} style={{...styles.contentData, marginBottom: 10}}>
+                              <Text style={{maxWidth: '40%', color: 'white',  fontSize: 11}}>{detalleItem.fechaLarga}</Text>
+                              <Text style={{color: 'white'}}>{detalleItem.asistencia = 1 ? 'Presente':'No Presente'}</Text>
+                            </View>
+                          ))}
+                      </View>
+                    )
+                  ))}
+              </ScrollView>
+            </View>
           </Modal>
+
         </ScrollView>
       )}
       <Nav />
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     height: '100%'
@@ -193,48 +211,12 @@ const styles = StyleSheet.create({
     color: '#ffff',
     fontSize: 15,
   },
-  modalOverlay: {
-    height: '100%',
-  },
-  optionsContainer:{
-    display: 'flex',
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 120,
-  },
-  modalContent: {
-    backgroundColor: '#012C56',
-    height: 200,
-    width: '90%',
-    borderRadius: 10,
-    padding: 10,
-  },
-  titleModal: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#ffff',
-    textAlign: 'center',
-  },
-  optionBtn: {
-    paddingVertical: 5,
-  },
-  optionText: {
-    color: '#ffff',
-    fontSize: 18,
-    textAlign: 'center',
-  },
-  optionTextActive: {
-    color: 'rgb(252, 189, 27)',
-    fontSize: 18,
-    textAlign: 'center',
-  },
   asigMain: {
     display: 'flex',
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 15,
     marginBottom: 10,
   },
   asignatureContainer: {
@@ -248,7 +230,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
   },
-  titleAsignature: {
+    titleAsignature: {
     fontWeight: 'bold',
     paddingBottom: 2,
   },
@@ -258,5 +240,49 @@ const styles = StyleSheet.create({
   },
   porcentajeAsignature: {
     paddingTop: 2,
+  },
+  contentData: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    paddingHorizontal: 30,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.483) ',
+  },
+  modalMain: {
+    backgroundColor: '#012C56',
+    width: '100%',
+    borderRadius: 20,
+    padding: 20,
+    maxHeight: '60%',
+  },
+  containerClose: {
+    position: 'absolute',
+    zIndex: 2,
+    right: 20,
+    top: 60,
+    width: 64,
+    height: 64,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  titleAsig: {
+    textAlign: 'center',
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  titleData: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   }
 })

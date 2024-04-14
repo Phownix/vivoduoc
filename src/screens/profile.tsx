@@ -156,7 +156,7 @@ export default function Profile () {
     <View style={styles.container}>
       <StatusBar style="dark" />
       <View style={styles.header}>
-        <BackToHome route="Home">Perfil Duoc</BackToHome>
+        <BackToHome route="Home">Perfil Academico</BackToHome>
       </View>
       {error ? (
         <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

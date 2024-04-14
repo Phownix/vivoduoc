@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import {ActivityIndicator, View, Image, TouchableOpacity, TextInput, Text, ScrollView} from 'react-native';
+import Constants from 'expo-constants';
 import StyleSheet from 'react-native-media-query';
 import { ALERT_TYPE, AlertNotificationRoot, Toast } from '@/components/notifications';
 import Animated, { useSharedValue, withSpring, useAnimatedStyle, interpolate, Extrapolate, withTiming } from 'react-native-reanimated';
@@ -54,8 +55,6 @@ const Login: React.FC<Props> = () => {
             });
             await AsyncStorage.removeItem('expired');
           }
-
-          console.log(expired);
 
           const token = await AsyncStorage.getItem('access_token');
 
@@ -203,6 +202,8 @@ const Login: React.FC<Props> = () => {
       await AsyncStorage.setItem('rut', profileData.rut);
 
       console.log('Sesion Iniciada con exito!');
+      
+      console.log(responseData.access_token);
 
       if (isSaveSession) {
         await AsyncStorage.setItem('isSaveSession', 'true');
@@ -225,6 +226,7 @@ const Login: React.FC<Props> = () => {
       setLoading(false);
     }
   };
+
   return (
     <View style={styles.container}>
       <StatusBar style="light" backgroundColor='#184f8a'/>
@@ -306,7 +308,7 @@ const Login: React.FC<Props> = () => {
             </TouchableOpacity>
           </Animated.View>
         </ScrollView>
-        <Text style={styles.version}>Unofficial App Developed By evairx v0.1.0</Text>
+        <Text style={styles.version}>Unofficial App Developed By evairx v{Constants.expoConfig.version}</Text>
       </AlertNotificationRoot>
       <View style={styles.bg}>
         <Test/>
