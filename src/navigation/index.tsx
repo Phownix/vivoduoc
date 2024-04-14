@@ -1,6 +1,6 @@
-import React, { useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
+import Constants from 'expo-constants';
 import { createStackNavigator } from '@react-navigation/stack';
-import { update } from '@/middleware/update';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Login from '@/screens/login';
@@ -10,7 +10,7 @@ import Calendar from '@/screens/calendar';
 import Notes from '@/screens/notes';
 import Assistance from '@/screens/assistance';
 import Profile from '@/screens/profile';
-import Credential from '@/screens/credential'
+import Credential from '@/screens/credential';
 import UpdateScreen from '@/screens/updateScreen';
 
 type RootStackNavigatorProps = {
@@ -24,59 +24,74 @@ type RootStackNavigatorProps = {
   Credential: undefined;
 };
 
-
 const Stack = createStackNavigator<RootStackNavigatorProps>();
 
-export default function Navigation({}) {
-    const [initialRoute, setInitialRoute] = useState<any>('Login');
-    const [loading, setLoading] = useState<boolean>(true);
+export default function Navigation() {
+  const [initialRoute, setInitialRoute] = useState<any>('Login');
+  const [loading, setLoading] = useState<boolean>(true);
+  const [needsUpdate, setNeedsUpdate] = useState<boolean>(false);
 
-    if(update) {
-      return (
-        <UpdateScreen/>
-      )
-    }
+  useEffect(() => {
+    const checkUpdateAndToken = async () => {
+      try {
+        const updateNeeded = await checkForUpdate();
+        setNeedsUpdate(updateNeeded);
 
-    useEffect(() => {
-      const checkTokenAndNavigate = async () => {
-        try {
+        if (!updateNeeded) {
           const token = await AsyncStorage.getItem('access_token');
           if (token) {
             setInitialRoute('Home');
-            setLoading(false);
           }
-          setLoading(false);
-        } catch (error) {
-          console.error('Error al verificar el token:', error);
-          setLoading(false);
         }
-      };
-
-      if(!update) {
-        checkTokenAndNavigate();
+      } catch (error) {
+        console.error('Error al verificar la actualización o el token:', error);
+      } finally {
+        setLoading(false);
       }
-    }, []);
+    };
 
-    if(loading) return null;
+    checkUpdateAndToken();
+  }, []);
 
-    return (
-        <Stack.Navigator
-            initialRouteName={initialRoute}
-            screenOptions={{ 
-                headerShown: false, 
-                cardStyle: {
-                    backgroundColor: '#fff',
-                },
-            }}
-        >
-            <Stack.Screen name="Login" component={Login} options={{ animationEnabled: true }}/>
-            <Stack.Screen name="Home" component={Home}  options={{ animationEnabled: true }}/>
-            <Stack.Screen name="Ava" component={Ava}  options={{ animationEnabled: false }}/>
-            <Stack.Screen name="Calendar" component={Calendar} options={{ animationEnabled: false }}/>
-            <Stack.Screen name="Notes" component={Notes} options={{ animationEnabled: false }}/>
-            <Stack.Screen name="Assistance" component={Assistance} options={{ animationEnabled: false }}/>
-            <Stack.Screen name="Profile" component={Profile} options={{ animationEnabled: false }}/>
-            <Stack.Screen name="Credential" component={Credential} options={{ animationEnabled: true }}/>
-        </Stack.Navigator>
-    );
+  if (loading) return null;
+
+  if (needsUpdate) {
+    return <UpdateScreen />;
+  }
+
+  return (
+    <Stack.Navigator
+      initialRouteName={initialRoute}
+      screenOptions={{ 
+        headerShown: false, 
+        cardStyle: {
+          backgroundColor: '#fff',
+        },
+      }}
+    >
+      <Stack.Screen name="Login" component={Login} options={{ animationEnabled: true }} />
+      <Stack.Screen name="Home" component={Home} options={{ animationEnabled: true }} />
+      <Stack.Screen name="Ava" component={Ava} options={{ animationEnabled: false }} />
+      <Stack.Screen name="Calendar" component={Calendar} options={{ animationEnabled: false }} />
+      <Stack.Screen name="Notes" component={Notes} options={{ animationEnabled: false }} />
+      <Stack.Screen name="Assistance" component={Assistance} options={{ animationEnabled: false }} />
+      <Stack.Screen name="Profile" component={Profile} options={{ animationEnabled: false }} />
+      <Stack.Screen name="Credential" component={Credential} options={{ animationEnabled: true }} />
+    </Stack.Navigator>
+  );
+}
+
+async function checkForUpdate(): Promise<boolean> {
+  try {
+    const res = await fetch('https://raw.githubusercontent.com/evairx/vivoduoc/main/version.json');
+    const data = await res.json();
+
+    const appVersion = Constants?.expoConfig?.version || '';
+    const version = data.version || '';
+
+    return appVersion !== version;
+  } catch (error) {
+    console.error("Error al verificar la actualización:", error);
+    return false;
+  }
 }
