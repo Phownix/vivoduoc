@@ -202,8 +202,6 @@ const Login: React.FC<Props> = () => {
       await AsyncStorage.setItem('rut', profileData.rut);
 
       console.log('Sesion Iniciada con exito!');
-      
-      console.log(responseData.access_token);
 
       if (isSaveSession) {
         await AsyncStorage.setItem('isSaveSession', 'true');
