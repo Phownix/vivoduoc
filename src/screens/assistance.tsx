@@ -160,7 +160,7 @@ export default function Assistance() {
                           {item.detalle.map((detalleItem, detalleIndex) => (
                             <View key={detalleIndex} style={{...styles.contentData, marginBottom: 10}}>
                               <Text style={{maxWidth: '40%', color: 'white',  fontSize: 11}}>{detalleItem.fechaLarga}</Text>
-                              <Text style={{color: 'white'}}>{detalleItem.asistencia = 1 ? 'Presente':'No Presente'}</Text>
+                              <Text style={{color: 'white'}}>{detalleItem.asistencia = 1 ? 'Presente':'Ausente'}</Text>
                             </View>
                           ))}
                       </View>

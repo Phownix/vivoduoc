@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState} from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { update } from '@/middleware/update';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Login from '@/screens/login';
 import Home from '@/screens/home';
@@ -11,6 +11,7 @@ import Notes from '@/screens/notes';
 import Assistance from '@/screens/assistance';
 import Profile from '@/screens/profile';
 import Credential from '@/screens/credential'
+import UpdateScreen from '@/screens/updateScreen';
 
 type RootStackNavigatorProps = {
   Home: undefined;
@@ -23,13 +24,18 @@ type RootStackNavigatorProps = {
   Credential: undefined;
 };
 
+
 const Stack = createStackNavigator<RootStackNavigatorProps>();
 
 export default function Navigation({}) {
     const [initialRoute, setInitialRoute] = useState<any>('Login');
     const [loading, setLoading] = useState<boolean>(true);
 
-    console.log(update);
+    if(update) {
+      return (
+        <UpdateScreen/>
+      )
+    }
 
     useEffect(() => {
       const checkTokenAndNavigate = async () => {
@@ -45,8 +51,10 @@ export default function Navigation({}) {
           setLoading(false);
         }
       };
-    
-      checkTokenAndNavigate();
+
+      if(!update) {
+        checkTokenAndNavigate();
+      }
     }, []);
 
     if(loading) return null;

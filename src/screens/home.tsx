@@ -65,6 +65,7 @@ export default function Home() {
             </View>
           </View>
         </View>
+
       </ScrollView>
       <Nav/>
     </View>
