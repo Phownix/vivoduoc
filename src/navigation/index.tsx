@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import React, { useEffect, useState, useCallback } from 'react';
 import Constants from 'expo-constants';
 import { createStackNavigator } from '@react-navigation/stack';
 import NetInfo from "@react-native-community/netinfo";
@@ -13,6 +14,8 @@ import Assistance from '@/screens/assistance';
 import Profile from '@/screens/profile';
 import Credential from '@/screens/credential';
 import UpdateScreen from '@/screens/updateScreen';
+
+import Loading from '@/screens/loading';
 
 type RootStackNavigatorProps = {
   Home: undefined;
@@ -33,49 +36,53 @@ export default function Navigation() {
   const [loading, setLoading] = useState<boolean>(true);
   const [isConnected, setIsConnected] = useState<boolean>(true);
 
-  useEffect(() => {
-    const checkConnected = async () => {
-      try {
-        const state = await NetInfo.fetch();
-        setIsConnected(state.isConnected);
-      } catch (error) {
-        console.error('Error al obtener el estado de la conexión:', error);
-        setIsConnected(false);
-      }
-    };
-
-    checkConnected();
-  }, []);
-
-  useEffect(() => {
-    const checkUpdateAndToken = async () => {
-      try {
-        const updateNeeded = await checkForUpdate();
-
-        if (!updateNeeded) {
-          const token = await AsyncStorage.getItem('access_token');
-          if (token) {
-            setInitialRoute('Home');
-          }
-        } else {
-          setInitialRoute('Update');
+  useFocusEffect(
+    useCallback(() => {
+      const checkConnected = async () => {
+        try {
+          const state = await NetInfo.fetch();
+          setIsConnected(state.isConnected);
+        } catch (error) {
+          console.error('Error al obtener el estado de la conexión:', error);
+          setIsConnected(false);
         }
-      } catch (error) {
-        console.error('Error al verificar la actualización o el token:', error);
-      } finally {
+      };
+  
+      checkConnected();
+    } ,[])
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      const checkUpdateAndToken = async () => {
+        try {
+          const updateNeeded = await checkForUpdate();
+  
+          if (!updateNeeded) {
+            const token = await AsyncStorage.getItem('access_token');
+            if (token) {
+              setInitialRoute('Home');
+            }
+          } else {
+            setInitialRoute('Update');
+          }
+        } catch (error) {
+          console.error('Error al verificar la actualización o el token:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      if (isConnected) {
+        checkUpdateAndToken();
+      } else {
+        setInitialRoute('Home');
         setLoading(false);
       }
-    };
+    }, [])
+  );
 
-    if (isConnected) {
-      checkUpdateAndToken();
-    } else {
-      setInitialRoute('Home');
-      setLoading(false);
-    }
-  }, [isConnected]);
-
-  if (loading) return null;
+  if (loading) return <Loading/>;
 
   return (
     <Stack.Navigator
