@@ -240,7 +240,7 @@ const Login: React.FC<Props> = () => {
           </View>
           <View>
             <Animated.Text style={[usernameFocused || username ? styles.inputTextSelected : styles.inputText, animatedFade]}>
-                  Correo
+              Correo
             </Animated.Text>
             <Animated.View style={[styles.inputContainer, animatedFade]}>
               <TextInput 
@@ -255,7 +255,7 @@ const Login: React.FC<Props> = () => {
               </View>
             </Animated.View>
             <Animated.Text style={[passwordFocused || password ? styles.inputTextSelected : styles.inputText, animatedFade]}>
-                Contraseña
+              Contraseña
             </Animated.Text>
             <Animated.View style={[styles.inputContainer, animatedFade]}>
               <TextInput
@@ -285,7 +285,7 @@ const Login: React.FC<Props> = () => {
               onValueChange={setSaveSession}
               color={isSaveSession ? 'rgb(252, 189, 27)' : undefined}
             />
-            <Text style={styles.saveSessionText}>Permanecer conectado</Text>
+            <Text style={styles.saveSessionText}>Recuérdame</Text>
           </Animated.View>
           <Animated.View style={[animatedTopStyle]}>
             <TouchableOpacity style={!username || !password ? styles.loginDisabled : styles.loginBtn} onPress={postData}  disabled={!username || !password} >

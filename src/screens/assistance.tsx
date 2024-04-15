@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, RefreshControl ,Modal ,View, ScrollView ,Text, StyleSheet, FlatList } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import * as FileSystem from 'expo-file-system';
 import Constants from 'expo-constants';
 import Loading from '@/components/loading';
@@ -50,6 +51,7 @@ export default function Assistance() {
   const navigation = useNavigation<INavigationProps>();
 
   VerifyToken('Login');
+
   const onRefresh = () => {
     setRefreshing(true);
     setLoading(true);
@@ -71,37 +73,39 @@ export default function Assistance() {
     }
   };
 
-  useEffect(() => {
-    const initData = async () => {
-      const directory = FileSystem.documentDirectory + 'data/';
-      const fileName = 'assistance.json';
-      const filePath = directory + fileName;
-      try {
-        const directoryInfo = await FileSystem.getInfoAsync(directory);
-
-        if (!directoryInfo.exists) {
-          await FileSystem.makeDirectoryAsync(directory, { intermediates: true });
-        }
+  useFocusEffect(
+    useCallback(() => {
+      const initData = async () => {
+        const directory = FileSystem.documentDirectory + 'data/';
+        const fileName = 'assistance.json';
+        const filePath = directory + fileName;
+        try {
+          const directoryInfo = await FileSystem.getInfoAsync(directory);
   
-        const fileInfo = await FileSystem.getInfoAsync(filePath);
-        if (fileInfo.exists) {
-          const fileContent = await FileSystem.readAsStringAsync(filePath);
-          const assistanceJson = JSON.parse(fileContent);
-          console.log('Datos cargados desde el archivo JSON.');
-          setData(assistanceJson);
-          setSelectedData(assistanceJson[0]);
-          setLoading(false);
-        } else {
-          console.log('El archivo JSON no existe en el directorio.');
-          fetchData();
+          if (!directoryInfo.exists) {
+            await FileSystem.makeDirectoryAsync(directory, { intermediates: true });
+          }
+    
+          const fileInfo = await FileSystem.getInfoAsync(filePath);
+          if (fileInfo.exists) {
+            const fileContent = await FileSystem.readAsStringAsync(filePath);
+            const assistanceJson = JSON.parse(fileContent);
+            console.log('Datos cargados desde el archivo JSON.');
+            setData(assistanceJson);
+            setSelectedData(assistanceJson[0]);
+            setLoading(false);
+          } else {
+            console.log('El archivo JSON no existe en el directorio.');
+            fetchData();
+          }
+        } catch (error) {
+          console.error('Error al inicializar los datos:', error);
+          setError(true);
         }
-      } catch (error) {
-        console.error('Error al inicializar los datos:', error);
-        setError(true);
-      }
-    };
-    initData();
-  }, [])
+      };
+      initData();
+    }, [])
+  )
 
   const fetchData = async () => {
     try {
@@ -279,6 +283,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     color: '#ffff',
     fontSize: 15,
+    fontWeight: 'bold',
   },
   asigMain: {
     display: 'flex',
@@ -299,7 +304,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
   },
-    titleAsignature: {
+  titleAsignature: {
     fontWeight: 'bold',
     paddingBottom: 2,
   },

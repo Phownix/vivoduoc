@@ -1,4 +1,5 @@
-import { useState,useEffect } from 'react';
+import { useState,useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, ScrollView ,Text,RefreshControl, Image,TouchableOpacity } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import StyleSheet from 'react-native-media-query';
@@ -36,38 +37,40 @@ export default function Profile () {
   const [error, setError] = useState<boolean>(false);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const navigation = useNavigation<INavigationProps>();
-
-  useEffect(() => {
-    const initData = async () => {
-      const directory = FileSystem.documentDirectory + 'data/';
-      const fileName = 'profile.json';
-      const filePath = directory + fileName;
-      try {
-        const directoryInfo = await FileSystem.getInfoAsync(directory);
-        if (!directoryInfo.exists) {
-          await FileSystem.makeDirectoryAsync(directory, { intermediates: true });
-        }
   
-        const fileInfo = await FileSystem.getInfoAsync(filePath);
-        if (fileInfo.exists) {
-          const fileContent = await FileSystem.readAsStringAsync(filePath);
-          const profileJson = JSON.parse(fileContent);
-          console.log('Datos cargados desde el archivo JSON.');
-          setData(profileJson);
-          setLoading(false);
-        } else {
-          console.log('El archivo JSON no existe en el directorio.');
-          fetchData();
-        }
-      } catch (error) {
-        console.error('Error al inicializar los datos:', error);
-        setError(true);
-      }
-    };
-    initData();
-  }, [])
-
   VerifyToken('Login');
+
+  useFocusEffect(
+    useCallback(() => {
+      const initData = async () => {
+        const directory = FileSystem.documentDirectory + 'data/';
+        const fileName = 'profile.json';
+        const filePath = directory + fileName;
+        try {
+          const directoryInfo = await FileSystem.getInfoAsync(directory);
+          if (!directoryInfo.exists) {
+            await FileSystem.makeDirectoryAsync(directory, { intermediates: true });
+          }
+    
+          const fileInfo = await FileSystem.getInfoAsync(filePath);
+          if (fileInfo.exists) {
+            const fileContent = await FileSystem.readAsStringAsync(filePath);
+            const profileJson = JSON.parse(fileContent);
+            console.log('Datos cargados desde el archivo JSON.');
+            setData(profileJson);
+            setLoading(false);
+          } else {
+            console.log('El archivo JSON no existe en el directorio.');
+            fetchData();
+          }
+        } catch (error) {
+          console.error('Error al inicializar los datos:', error);
+          setError(true);
+        }
+      };
+      initData();
+    },[])
+  )
 
   const onRefresh = () => {
     setRefreshing(true);
