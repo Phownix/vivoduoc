@@ -1,4 +1,5 @@
-import { View, Text,Image, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text,Image, ScrollView, TouchableOpacity, Linking } from "react-native";
+import { useEffect, useState, useCallback } from "react";
 import { vh } from "react-native-expo-viewport-units";
 import StyleSheet from 'react-native-media-query';
 import { StatusBar } from "expo-status-bar";
@@ -6,29 +7,63 @@ import { StatusBar } from "expo-status-bar";
 
 import Test from '@/icons/test';
 
-export default function UpdateScreen() {
-    return (
-        <View style={styles.container}>
-          <StatusBar style="light" backgroundColor='#184f8a'/>
-            <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 50 }}>
-                <Image 
-                source={require('../../assets/logo_vivoduoc.png')}
-                style={styles.logo}
-              />
-            </ScrollView>
-          <View style={styles.footerMain}>
-            <Text style={styles.title}>Parece que tienes una versión antigua de la aplicación. Actualiza ahora tener una mejor experiencia. </Text>
-            <TouchableOpacity style={styles.btn}>
-              <Text style={styles.btnText}>ACTUALIZAR MI APP</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.bg}>
-            <Test/>
-          </View>
-        </View>
-      );
-    };
+interface IData {
+  version: string;
+  link: string;
+}
 
+export default function UpdateScreen() {
+  const [data, setData] = useState<IData | null>(null);
+
+  useEffect(() => {
+    async function checkForUpdate() {
+      try {
+        const res = await fetch('https://raw.githubusercontent.com/evairx/vivoduoc/main/version.json');
+        const newData = await res.json();
+        setData(newData);
+      } catch (error) {
+        console.error("Error al verificar la actualización:", error);
+      }
+    }
+    checkForUpdate();
+  }, []);
+
+  const handlePress = useCallback(async () => {
+    if (data && data.link) {
+      try {
+        const supported = await Linking.canOpenURL(data.link);
+        if (supported) {
+          await Linking.openURL(data.link);
+        }
+      } catch (error) {
+        console.error("Error al abrir el enlace:", error);
+      }
+    }
+  }, [data]);
+
+  return (
+    <View style={styles.container}>
+      <StatusBar style="light" backgroundColor='#184f8a' />
+      <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 50 }}>
+        <Image
+          source={require('../../assets/logo_vivoduoc.png')}
+          style={styles.logo}
+        />
+      </ScrollView>
+      <View style={styles.footerMain}>
+        <Text style={styles.title}>Parece que tienes una versión antigua de la aplicación. Actualiza ahora para tener una mejor experiencia.</Text>
+        {data?.link &&
+          <TouchableOpacity style={styles.btn} onPress={handlePress}>
+            <Text style={styles.btnText}>ACTUALIZAR MI APP</Text>
+          </TouchableOpacity>
+        }
+      </View>
+      <View style={styles.bg}>
+        <Test />
+      </View>
+    </View>
+  );
+};
     
 const { styles }= StyleSheet.create({
       container: {

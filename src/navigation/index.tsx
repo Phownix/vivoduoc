@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Constants from 'expo-constants';
 import { createStackNavigator } from '@react-navigation/stack';
+import NetInfo from "@react-native-community/netinfo";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Login from '@/screens/login';
@@ -30,6 +31,21 @@ export default function Navigation() {
   const [initialRoute, setInitialRoute] = useState<any>('Login');
   const [loading, setLoading] = useState<boolean>(true);
   const [needsUpdate, setNeedsUpdate] = useState<boolean>(false);
+  const [isConnected, setIsConnected] = useState<boolean>(true);
+
+  useEffect(() => {
+    const checkConnected = async () => {
+      try {
+        const state = await NetInfo.fetch();
+        setIsConnected(state.isConnected);
+      } catch (error) {
+        console.error('Error al obtener el estado de la conexión:', error);
+        setIsConnected(false);
+      }
+    };
+
+    checkConnected();
+  }, []);
 
   useEffect(() => {
     const checkUpdateAndToken = async () => {
@@ -50,8 +66,13 @@ export default function Navigation() {
       }
     };
 
-    checkUpdateAndToken();
-  }, []);
+    if (isConnected) {
+      checkUpdateAndToken();
+    } else {
+      setInitialRoute('Home');
+      setLoading(false);
+    }
+  }, [isConnected]);
 
   if (loading) return null;
 
