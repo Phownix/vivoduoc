@@ -306,7 +306,7 @@ const Login: React.FC<Props> = () => {
             </TouchableOpacity>
           </Animated.View>
         </ScrollView>
-        <Text style={styles.version}>Unofficial App Developed By evairx v{Constants.expoConfig.version}</Text>
+        <Text style={styles.version}>vivoDuoc v{Constants.expoConfig.version} - 2024</Text>
       </AlertNotificationRoot>
       <View style={styles.bg}>
         <Test/>
