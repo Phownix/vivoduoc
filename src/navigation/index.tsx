@@ -23,6 +23,7 @@ type RootStackNavigatorProps = {
   Assistance: undefined;
   Profile: undefined;
   Credential: undefined;
+  Update: undefined;
 };
 
 const Stack = createStackNavigator<RootStackNavigatorProps>();
@@ -30,7 +31,6 @@ const Stack = createStackNavigator<RootStackNavigatorProps>();
 export default function Navigation() {
   const [initialRoute, setInitialRoute] = useState<any>('Login');
   const [loading, setLoading] = useState<boolean>(true);
-  const [needsUpdate, setNeedsUpdate] = useState<boolean>(false);
   const [isConnected, setIsConnected] = useState<boolean>(true);
 
   useEffect(() => {
@@ -51,13 +51,14 @@ export default function Navigation() {
     const checkUpdateAndToken = async () => {
       try {
         const updateNeeded = await checkForUpdate();
-        setNeedsUpdate(updateNeeded);
 
         if (!updateNeeded) {
           const token = await AsyncStorage.getItem('access_token');
           if (token) {
             setInitialRoute('Home');
           }
+        } else {
+          setInitialRoute('Update');
         }
       } catch (error) {
         console.error('Error al verificar la actualización o el token:', error);
@@ -75,10 +76,6 @@ export default function Navigation() {
   }, [isConnected]);
 
   if (loading) return null;
-
-  if (needsUpdate) {
-    return <UpdateScreen />;
-  }
 
   return (
     <Stack.Navigator
@@ -98,6 +95,7 @@ export default function Navigation() {
       <Stack.Screen name="Assistance" component={Assistance} options={{ animationEnabled: false }} />
       <Stack.Screen name="Profile" component={Profile} options={{ animationEnabled: false }} />
       <Stack.Screen name="Credential" component={Credential} options={{ animationEnabled: true }} />
+      <Stack.Screen name="Update" component={UpdateScreen} options={{ animationEnabled: true }} />
     </Stack.Navigator>
   );
 }
